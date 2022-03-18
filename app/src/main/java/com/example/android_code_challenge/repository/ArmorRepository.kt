@@ -192,6 +192,7 @@ class ArmorRepository @Inject constructor(
         return armorListLocal
     }
 
+
     fun insertArmor(list: List<ArmorModel>) {
         val listTest = list.map {
             mapperArmorModel.map(it)
