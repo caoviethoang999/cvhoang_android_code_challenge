@@ -72,17 +72,18 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
                 }
             } else {
                 gettingDataForLocal()
+                viewModel.armorListLocal.observe(viewLifecycleOwner) {
+                    armorAdapter.getAll(it)
+                    binding.recyclerViewArmor.adapter = armorAdapter
+                }
                 isLocalDataExist = true
             }
         }
     }
-
     private fun gettingDataForLocal() {
         viewModel.getArmor(binding)
         viewModel.armorList.observe(viewLifecycleOwner) {
             list = it as java.util.ArrayList
-            armorAdapter.getAll(list)
-            binding.recyclerViewArmor.adapter = armorAdapter
             viewModel.insertArmor(list)
         }
     }
@@ -118,8 +119,8 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onQueryTextChange(p0: String?): Boolean {
-        viewModel.searchArmorByName(p0)
-        armorAdapter.notifyDataSetChanged()
+            viewModel.searchArmorByName(p0)
+            armorAdapter.notifyDataSetChanged()
         return true
     }
 
