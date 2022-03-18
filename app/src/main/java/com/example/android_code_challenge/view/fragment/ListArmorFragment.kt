@@ -16,7 +16,6 @@ import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
-import com.example.android_code_challenge.model.ArmorModelEntity
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -29,9 +28,8 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentListArmorBinding
     private var list: List<ArmorModel> = ArrayList()
-    private var listEntity: List<ArmorModelEntity> = ArrayList()
     var isLocalDataExist = false
-    val handler: Handler = Handler()
+    private val handler: Handler = Handler()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
