@@ -22,7 +22,7 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        var armor: ArmorModel = list[position]
+        val armor: ArmorModel = list[position]
         holder.binding.txtId.text = armor.id.toString()
         holder.binding.txtName.text = armor.name
         holder.binding.txtRank.text = armor.rank
@@ -32,20 +32,28 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
             holder.binding.txtSlots.text = armor.slots.toString()
         }
         holder.binding.txtDefense.text = armor.defense.toString()
-        if (armor.type.equals("head", true)) {
-            holder.binding.imgIcon.setImageResource(R.drawable.ic_head)
-        } else if (armor.type.equals("chest", true)) {
-            holder.binding.imgIcon.setImageResource(R.drawable.ic_chest)
-        } else if (armor.type.equals("deco", true)) {
-            holder.binding.imgIcon.setImageResource(R.drawable.ic_deco)
-        } else if (armor.type.equals("gloves", true)) {
-            holder.binding.imgIcon.setImageResource(R.drawable.ic_gloves)
-        } else if (armor.type.equals("legs", true)) {
-            holder.binding.imgIcon.setImageResource(R.drawable.ic_legs)
-        } else if (armor.type.equals("shield", true)) {
-            holder.binding.imgIcon.setImageResource(R.drawable.ic_shield)
-        } else if (armor.type.equals("waist", true)) {
-            holder.binding.imgIcon.setImageResource(R.drawable.ic_waist)
+        when {
+            armor.type.equals("head", true) -> {
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_head)
+            }
+            armor.type.equals("chest", true) -> {
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_chest)
+            }
+            armor.type.equals("deco", true) -> {
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_deco)
+            }
+            armor.type.equals("gloves", true) -> {
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_gloves)
+            }
+            armor.type.equals("legs", true) -> {
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_legs)
+            }
+            armor.type.equals("shield", true) -> {
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_shield)
+            }
+            armor.type.equals("waist", true) -> {
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_waist)
+            }
         }
     }
 
