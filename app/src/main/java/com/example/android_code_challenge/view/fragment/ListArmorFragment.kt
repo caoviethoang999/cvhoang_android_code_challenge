@@ -23,13 +23,14 @@ import javax.inject.Inject
 
 class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
     private var armorAdapter: ArmorAdapter = ArmorAdapter()
+
     @Inject
     lateinit var viewModel: ArmorViewModel
 
-    private lateinit var binding:FragmentListArmorBinding
-    private var list:List<ArmorModel> = ArrayList()
-    private var listEntity:List<ArmorModelEntity> = ArrayList()
-    var isLocalDataExist=false
+    private lateinit var binding: FragmentListArmorBinding
+    private var list: List<ArmorModel> = ArrayList()
+    private var listEntity: List<ArmorModelEntity> = ArrayList()
+    var isLocalDataExist = false
     val handler: Handler = Handler()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,52 +58,52 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
         checkingDataLocal()
         handler.postDelayed({
             binding.btnGenerateItem.isEnabled = true
-            binding.btnGenerateItem.isClickable = true }, 5000)
+            binding.btnGenerateItem.isClickable = true
+        }, 5000)
     }
 
     override fun onResume() {
         super.onResume()
-            binding.btnGenerateItem.clickWithDebounce {
-                if (isLocalDataExist){
-                    viewModel.armorListLocal.observe(viewLifecycleOwner){
-                        armorAdapter.getAll(it)
-                        binding.recyclerViewArmor.adapter = armorAdapter
-                    }
-                }else{
-                    gettingDataForLocal()
-                    isLocalDataExist=true
+        binding.btnGenerateItem.clickWithDebounce {
+            if (isLocalDataExist) {
+                viewModel.armorListLocal.observe(viewLifecycleOwner) {
+                    armorAdapter.getAll(it)
+                    binding.recyclerViewArmor.adapter = armorAdapter
                 }
+            } else {
+                gettingDataForLocal()
+                isLocalDataExist = true
             }
+        }
     }
-    private fun gettingDataForLocal(){
+
+    private fun gettingDataForLocal() {
         viewModel.getArmor(binding)
-        viewModel.armorList.observe(viewLifecycleOwner){
-            list= it as java.util.ArrayList
+        viewModel.armorList.observe(viewLifecycleOwner) {
+            list = it as java.util.ArrayList
             armorAdapter.getAll(list)
             binding.recyclerViewArmor.adapter = armorAdapter
             viewModel.insertArmor(list)
         }
     }
 
-    private fun checkingDataLocal(){
+    private fun checkingDataLocal() {
         viewModel.getArmorLocal()
-        viewModel.armorListLocal.observe(viewLifecycleOwner){
-            if (it.isNotEmpty()){
-                isLocalDataExist=true
+        viewModel.armorListLocal.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                isLocalDataExist = true
             }
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
-            binding = FragmentListArmorBinding.inflate(inflater, container, false)
+        binding = FragmentListArmorBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_armor, menu)
@@ -122,22 +123,20 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
         return true
     }
 
-
     private fun View.clickWithDebounce(debounceTime: Long = 600L, action: () -> Unit) {
         this.setOnClickListener(object : View.OnClickListener {
             private var lastClickTime: Long = 0
 
             override fun onClick(v: View) {
-                if (SystemClock.elapsedRealtime() - lastClickTime < debounceTime){
+                if (SystemClock.elapsedRealtime() - lastClickTime < debounceTime) {
                     binding.btnGenerateItem.isEnabled = false
-                binding.btnGenerateItem.isClickable = false
-            }else {
-                action()
+                    binding.btnGenerateItem.isClickable = false
+                } else {
+                    action()
                 }
 
                 lastClickTime = SystemClock.elapsedRealtime()
             }
         })
     }
-
 }

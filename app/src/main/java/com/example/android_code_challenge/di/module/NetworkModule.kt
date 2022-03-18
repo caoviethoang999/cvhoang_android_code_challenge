@@ -33,6 +33,7 @@ class NetworkModule {
         }
         return retrofitService!!
     }
+
     @Provides
     @Singleton
     fun providesGson(): Gson {

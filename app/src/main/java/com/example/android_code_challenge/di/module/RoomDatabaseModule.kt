@@ -3,9 +3,9 @@ package com.example.android_code_challenge.di.module
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.example.android_code_challenge.DatabaseInfo
 import com.example.android_code_challenge.database.ArmorDAO
 import com.example.android_code_challenge.database.ArmorDatabase
-import com.example.android_code_challenge.DatabaseInfo
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -35,6 +35,4 @@ class RoomDatabaseModule {
     fun providePersonDao(db: ArmorDatabase): ArmorDAO {
         return db.armorDAO()
     }
-
-
 }
