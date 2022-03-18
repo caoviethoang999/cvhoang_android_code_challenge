@@ -5,13 +5,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragment.ListArmorFragment">
+
     <androidx.appcompat.widget.Toolbar
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/armorToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <ScrollView
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,9 +21,11 @@
         android:id="@+id/recycleViewLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <Button
                 android:clickable="false"
                 android:enabled="false"
@@ -31,7 +35,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="@string/fragmentListArmor_btnGenerateItem_text"/>
+                android:text="@string/fragmentListArmor_btnGenerateItem_text" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewArmor"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -39,9 +44,10 @@
                 app:layout_constraintTop_toBottomOf="@id/btnGenerateItem"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
     <TextView
         android:visibility="invisible"
         android:id="@+id/txtLoading"
@@ -49,6 +55,6 @@
         android:text="@string/fragmentListArmor_btnIsLoading_text"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

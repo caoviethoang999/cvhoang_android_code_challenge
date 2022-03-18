@@ -4,7 +4,7 @@ import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.model.JSONArmorResponse
 
 class ArmorMapper {
-    private val armorSkillMapper= ArmorSkillMapper()
+    private val armorSkillMapper = ArmorSkillMapper()
 
     fun map(armor: JSONArmorResponse): ArmorModel {
         return ArmorModel(
@@ -48,7 +48,6 @@ class ArmorMapper {
         )
     }
 
-
     private fun map(JSONArmorSets: JSONArmorResponse.ArmorSets): ArmorModel.ArmorSets {
         return ArmorModel.ArmorSets(
             id = JSONArmorSets.id,
@@ -72,6 +71,7 @@ class ArmorMapper {
             item = materials.item?.let { map(it) }
         )
     }
+
     private fun map(items: JSONArmorResponse.Item): ArmorModel.Item {
         return ArmorModel.Item(
             id = items.id,

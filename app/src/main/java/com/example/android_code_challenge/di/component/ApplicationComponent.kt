@@ -1,18 +1,18 @@
 package com.example.android_code_challenge.di.component
 
 import android.app.Application
-import com.example.android_code_challenge.view.application.MainApplication
 import com.example.android_code_challenge.di.module.ActivityBuildersModule
 import com.example.android_code_challenge.di.module.FragmentBuildersModule
 import com.example.android_code_challenge.di.module.MapperModule
 import com.example.android_code_challenge.di.module.NetworkModule
 import com.example.android_code_challenge.di.module.RoomDatabaseModule
 import com.example.android_code_challenge.di.module.ViewModelModule
+import com.example.android_code_challenge.view.application.MainApplication
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
 import dagger.android.support.AndroidSupportInjectionModule
+import dagger.android.support.DaggerApplication
 import javax.inject.Singleton
 
 @Singleton

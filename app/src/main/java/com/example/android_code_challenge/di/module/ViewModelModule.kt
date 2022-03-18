@@ -19,5 +19,4 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ArmorViewModel::class)
     abstract fun bindViewModel(mainViewModel: ArmorViewModel): ViewModel
-
 }

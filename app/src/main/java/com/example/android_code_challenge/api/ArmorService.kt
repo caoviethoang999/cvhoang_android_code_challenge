@@ -16,7 +16,7 @@ interface ArmorService {
     fun getArmorSkill(): Observable<JSONArmorSkillResponse>
 
     @GET
-    fun searchArmorByName(@Url url:String): Observable<List<JSONArmorResponse>>
+    fun searchArmorByName(@Url url: String): Observable<List<JSONArmorResponse>>
 
     // //Json return a object array
     // @GET("armor")

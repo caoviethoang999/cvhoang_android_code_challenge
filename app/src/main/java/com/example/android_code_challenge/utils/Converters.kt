@@ -12,8 +12,7 @@ class Converters {
     fun modifiersToString(armor9: ArmorModelEntity.Modifiers?): String = Gson().toJson(armor9)
 
     @TypeConverter
-    fun stringToModifiers(string: String?): ArmorModelEntity.Modifiers?
-    {
+    fun stringToModifiers(string: String?): ArmorModelEntity.Modifiers? {
         return if (string != null) {
             Gson().fromJson(string, ArmorModelEntity.Modifiers::class.java)
         } else {
@@ -25,9 +24,12 @@ class Converters {
     fun skillsToString(armor8: List<ArmorModelEntity.Skills>?): String = Gson().toJson(armor8)
 
     @TypeConverter
-    fun stringToSkills(string: String?): List<ArmorModelEntity.Skills>?     {
+    fun stringToSkills(string: String?): List<ArmorModelEntity.Skills>? {
         return if (string != null) {
-            Gson().fromJson<List<ArmorModelEntity.Skills>?>(string, object : TypeToken<List<ArmorModelEntity.Skills>?>() {}.type)
+            Gson().fromJson<List<ArmorModelEntity.Skills>?>(
+                string,
+                object : TypeToken<List<ArmorModelEntity.Skills>?>() {}.type
+            )
         } else {
             null
         }
@@ -68,6 +70,7 @@ class Converters {
             null
         }
     }
+
     @TypeConverter
     fun armorSetsToString(armor4: ArmorModelEntity.ArmorSets?): String = Gson().toJson(armor4)
 
@@ -79,6 +82,7 @@ class Converters {
             null
         }
     }
+
     @TypeConverter
     fun assetsToString(armor3: ArmorModelEntity.Assets?): String = Gson().toJson(armor3)
 
@@ -90,6 +94,7 @@ class Converters {
             null
         }
     }
+
     @TypeConverter
     fun materialsToString(armor2: ArmorModelEntity.Materials?): String = Gson().toJson(armor2)
 
@@ -101,14 +106,17 @@ class Converters {
             null
         }
     }
+
     @TypeConverter
     fun slotsToString(armor1: List<ArmorModelEntity.Slots>?): String = Gson().toJson(armor1)
 
     @TypeConverter
-    fun stringToSlots(string: String?): List<ArmorModelEntity.Slots>?
-    {
+    fun stringToSlots(string: String?): List<ArmorModelEntity.Slots>? {
         return if (string != null) {
-            Gson().fromJson<List<ArmorModelEntity.Slots>?>(string, object : TypeToken<List<ArmorModelEntity.Slots>?>() {}.type)
+            Gson().fromJson<List<ArmorModelEntity.Slots>?>(
+                string,
+                object : TypeToken<List<ArmorModelEntity.Slots>?>() {}.type
+            )
         } else {
             null
         }

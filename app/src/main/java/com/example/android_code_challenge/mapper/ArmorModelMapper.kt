@@ -60,7 +60,6 @@ class ArmorModelMapper {
         )
     }
 
-
     private fun map(JSONArmorSets: ArmorModel.ArmorSets): ArmorModelEntity.ArmorSets {
         return ArmorModelEntity.ArmorSets(
             id = JSONArmorSets.id,
@@ -84,6 +83,7 @@ class ArmorModelMapper {
             item = materials.item?.let { map(it) }
         )
     }
+
     private fun map(items: ArmorModel.Item): ArmorModelEntity.Item {
         return ArmorModelEntity.Item(
             id = items.id,
@@ -107,7 +107,7 @@ class ArmorModelMapper {
             name = armor.name,
             slots = armor.slots.map { map(it) },
             skills = armor.skills.map {
-                        map(it)
+                map(it)
             },
             armorSet = armor.armorSet?.let { map(it) },
             assets = armor.assets?.let { map(it) },
@@ -150,7 +150,6 @@ class ArmorModelMapper {
         )
     }
 
-
     private fun map(JSONArmorSets: ArmorModelEntity.ArmorSets): ArmorModel.ArmorSets {
         return ArmorModel.ArmorSets(
             id = JSONArmorSets.id,
@@ -174,6 +173,7 @@ class ArmorModelMapper {
             item = materials.item?.let { map(it) }
         )
     }
+
     private fun map(items: ArmorModelEntity.Item): ArmorModel.Item {
         return ArmorModel.Item(
             id = items.id,

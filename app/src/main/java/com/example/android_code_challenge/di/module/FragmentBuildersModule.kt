@@ -9,5 +9,4 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeListArmorFragment(): ListArmorFragment
-
 }
