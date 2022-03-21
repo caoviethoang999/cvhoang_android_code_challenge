@@ -117,7 +117,7 @@ data class ArmorModelEntity(
         var rank: Int = 0,
     ) {
         override fun toString(): String {
-            return "rank: $rank"
+            return "$rank"
         }
     }
 

@@ -6,10 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
+        android:src="@drawable/ic_gloves"
         android:layout_marginStart="@dimen/itemArmor_imgIcon_marginStart"
         android:id="@+id/imgIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/itemArmor_imgIcon_layoutWidth"
+        android:layout_height="@dimen/itemArmor_imgIcon_layoutHeight"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,6 +51,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtId"
         app:layout_constraintStart_toEndOf="@id/imgIcon"/>
+    <ImageView
+        android:contentDescription="@string/itemArmor_imgIconDeco_contentDescription"
+        android:layout_marginEnd="@dimen/itemArmor_imgIconDeco_marginEnd"
+        android:layout_marginBottom="@dimen/itemArmor_imgIconDeco_marginBottom"
+        android:layout_marginTop="@dimen/itemArmor_imgIconDeco_marginTop"
+        android:id="@+id/imgIconDeco"
+        android:layout_width="@dimen/itemArmor_imgIconDeco_layoutWidth"
+        android:layout_height="@dimen/itemArmor_imgIconDeco_layoutHeight"
+        app:layout_constraintTop_toBottomOf="@id/txtDefense"
+        app:layout_constraintEnd_toStartOf="@id/txtSlots"
+        app:layout_constraintBottom_toBottomOf="parent"/>
     <TextView
         android:layout_marginBottom="@dimen/itemArmor_txtSlots_marginBottom"
         android:layout_marginTop="@dimen/itemArmor_txtSlots_marginTop"

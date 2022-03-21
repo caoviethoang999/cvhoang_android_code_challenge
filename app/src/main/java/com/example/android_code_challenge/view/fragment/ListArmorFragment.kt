@@ -3,6 +3,7 @@ package com.example.android_code_challenge.view.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.Menu
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
@@ -18,6 +20,8 @@ import com.example.android_code_challenge.databinding.FragmentListArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
@@ -28,36 +32,27 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentListArmorBinding
     private var list: List<ArmorModel> = ArrayList()
-    var isLocalDataExist = false
-    private val handler: Handler = Handler()
+    private var isLocalDataExist = false
+    // private val handler: Handler = Handler()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
         val appCompatActivity = activity as AppCompatActivity?
         appCompatActivity?.setSupportActionBar(binding.armorToolbar)
         appCompatActivity?.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        // viewModel.getArmor(binding)
-        // viewModel.fetchArmorSkill(binding)
-        // viewModel.armorList.observe(viewLifecycleOwner){
-        //     list= it as ArrayList<ArmorModel>
-        //     viewModel.insertArmor(list)
-        // }
-        // viewModel.armorList.observe(viewLifecycleOwner) {
-        //     list= it
-        //     armorAdapter.getAll(it)
-        //     binding.test.adapter = armorAdapter
-        // }
-        // if (isLocalDataExist()){
-        //     armorAdapter.getAll(listEntity)
-        //     binding.test.adapter = armorAdapter
-        // }else{
-        //     fetchDataRemote()
-        // }
         checkingDataLocal()
-        handler.postDelayed({
+
+        // handler.postDelayed({
+        //     binding.btnGenerateItem.isEnabled = true
+        //     binding.btnGenerateItem.isClickable = true
+        // }, 5000)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(3000)
             binding.btnGenerateItem.isEnabled = true
             binding.btnGenerateItem.isClickable = true
-        }, 5000)
+        }
+
     }
 
     override fun onResume() {

@@ -2,6 +2,7 @@ package com.example.android_code_challenge.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_code_challenge.R
@@ -27,8 +28,11 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
         holder.binding.txtName.text = armor.name
         holder.binding.txtRank.text = armor.rank
         if (armor.slots.isNullOrEmpty()) {
+            holder.binding.imgIconDeco.visibility= View.INVISIBLE
             holder.binding.txtSlots.text = ""
         } else {
+            holder.binding.imgIconDeco.visibility= View.VISIBLE
+            holder.binding.imgIconDeco.setImageResource(R.drawable.ic_deco)
             holder.binding.txtSlots.text = armor.slots.toString()
         }
         holder.binding.txtDefense.text = armor.defense.toString()
@@ -65,6 +69,6 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
         RecyclerView.ViewHolder(binding.root)
 
     init {
-        list = ArrayList<ArmorModel>()
+        list = ArrayList()
     }
 }

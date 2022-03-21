@@ -75,7 +75,7 @@ data class ArmorModel(
         var rank: Int = 0,
     ) : Parcelable {
         override fun toString(): String {
-            return "rank: $rank"
+            return "$rank"
         }
     }
 

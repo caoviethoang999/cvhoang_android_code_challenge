@@ -17,6 +17,9 @@ class ArmorSkillModel(
     var skillName: String = ""
 ) : Parcelable {
 
+    override fun toString(): String {
+        return "$skillName - $description"
+    }
     @Parcelize
     class Modifiers : Parcelable {
         override fun toString(): String {

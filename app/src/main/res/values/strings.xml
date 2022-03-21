@@ -7,5 +7,6 @@
 
 
     <string name="itemArmor_imgIcon_contentDescription">This is landscape for icon</string>
+    <string name="itemArmor_imgIconDeco_contentDescription">This is landscape for icon</string>
 
 </resources>

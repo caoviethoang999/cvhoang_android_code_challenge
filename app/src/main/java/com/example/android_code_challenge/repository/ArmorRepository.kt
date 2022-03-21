@@ -34,59 +34,6 @@ class ArmorRepository @Inject constructor(
 
     private var armorListSkill = MutableLiveData<List<ArmorSkillModel>>()
 
-    // private var armorList = MutableLiveData<MutableList<JSONArmorResponse>>()
-
-    // fun fetchArmor(): MutableLiveData<MutableList<ArmorSkill>> {
-    //     armorService.getArmor()
-    //         .subscribeOn(Schedulers.io())
-    //         .map { armorResponse ->
-    //             var list:MutableList<ArmorSkill> = armorResponse.skills.toMutableList()
-    //
-    //             list
-    //         }
-    //         .observeOn(AndroidSchedulers.mainThread())
-    //         .subscribe(object : Observer<MutableList<ArmorSkill>> {
-    //             override fun onSubscribe(d: Disposable) {
-    //             }
-    //
-    //             override fun onNext(t: MutableList<ArmorSkill>) {
-    //                 armorList.postValue(t)
-    //             }
-    //
-    //             override fun onError(e: Throwable) {
-    //                 Log.d("Log Error",e.toString())
-    //             }
-    //
-    //             override fun onComplete() {
-    //             }
-    //         })
-    //     return armorList
-    // }
-
-    // fun fetchArmor(binding: FragmentListArmorBinding): MutableLiveData<MutableList<JSONArmorResponse>> {
-    //     armorService.getArmor()
-    //         .subscribeOn(Schedulers.io())
-    //         .observeOn(AndroidSchedulers.mainThread())
-    //         .subscribe(object : Observer<MutableList<JSONArmorResponse>> {
-    //             override fun onSubscribe(d: Disposable) {
-    //                 binding.txtLoading.visibility=android.view.View.VISIBLE
-    //             }
-    //
-    //             override fun onNext(t: MutableList<JSONArmorResponse>) {
-    //                 armorList.postValue(t)
-    //             }
-    //
-    //             override fun onError(e: Throwable) {
-    //                 Log.d("Log Error",e.toString())
-    //             }
-    //
-    //             override fun onComplete() {
-    //                 binding.txtLoading.visibility=android.view.View.INVISIBLE
-    //             }
-    //         })
-    //     return armorList
-    // }
-
     fun fetchArmor(binding: FragmentListArmorBinding): MutableLiveData<List<ArmorModel>> {
         armorService.getArmor()
             .subscribeOn(Schedulers.io())
