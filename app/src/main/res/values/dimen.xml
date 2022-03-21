@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //fragmentListArmor
+    <dimen name="fragmentListArmor_txtLoading_textSize">50sp</dimen>
+
+
+
+
+
+    //itemArmor
+    <dimen name="itemArmor_imgIcon_marginStart">10dp</dimen>
+    <dimen name="itemArmor_imgIcon_layoutHeight">40dp</dimen>
+    <dimen name="itemArmor_imgIcon_layoutWidth">40dp</dimen>
+
+    <dimen name="itemArmor_txtId_marginStart">10dp</dimen>
+    <dimen name="itemArmor_txtId_marginTop">5dp</dimen>
+
+    <dimen name="itemArmor_txtDefense_marginTop">5dp</dimen>
+
+    <dimen name="itemArmor_txtName_marginTop">5dp</dimen>
+    <dimen name="itemArmor_txtName_marginBottom">5dp</dimen>
+    <dimen name="itemArmor_txtName_marginEnd">3dp</dimen>
+
+    <dimen name="itemArmor_txtRank_marginStart">10dp</dimen>
+    <dimen name="itemArmor_txtRank_marginTop">15dp</dimen>
+    <dimen name="itemArmor_txtRank_marginBottom">5dp</dimen>
+
+    <dimen name="itemArmor_imgIconDeco_marginEnd">5dp</dimen>
+    <dimen name="itemArmor_imgIconDeco_marginTop">15dp</dimen>
+    <dimen name="itemArmor_imgIconDeco_marginBottom">5dp</dimen>
+    <dimen name="itemArmor_imgIconDeco_layoutHeight">20dp</dimen>
+    <dimen name="itemArmor_imgIconDeco_layoutWidth">20dp</dimen>
+
+    <dimen name="itemArmor_txtSlots_marginTop">15dp</dimen>
+    <dimen name="itemArmor_txtSlots_marginBottom">5dp</dimen>
+</resources>
