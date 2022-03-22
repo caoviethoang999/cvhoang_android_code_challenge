@@ -18,6 +18,7 @@ import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
+import com.example.android_code_challenge.repository.ArmorRepository
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.delay
@@ -40,7 +41,7 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
         val appCompatActivity = activity as AppCompatActivity?
         appCompatActivity?.setSupportActionBar(binding.armorToolbar)
         appCompatActivity?.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        checkingDataLocal()
+        // checkingDataLocal()
 
         // handler.postDelayed({
         //     binding.btnGenerateItem.isEnabled = true
@@ -52,38 +53,49 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
             binding.btnGenerateItem.isEnabled = true
             binding.btnGenerateItem.isClickable = true
         }
+        viewModel.status.observe(viewLifecycleOwner) {
+            when (it) {
+                ArmorRepository.Status.LOADING ->
+                    binding.txtLoading.visibility = View.VISIBLE
+                ArmorRepository.Status.DONE ->
+                    binding.txtLoading.visibility = View.GONE
+                else -> {}
+            }
+        }
 
     }
 
     override fun onResume() {
         super.onResume()
         binding.btnGenerateItem.clickWithDebounce {
-            if (isLocalDataExist) {
-                viewModel.armorListLocal.observe(viewLifecycleOwner) {
-                    armorAdapter.getAll(it)
-                    binding.recyclerViewArmor.adapter = armorAdapter
-                }
-            } else {
-                gettingDataForLocal()
-                viewModel.armorListLocal.observe(viewLifecycleOwner) {
-                    armorAdapter.getAll(it)
-                    binding.recyclerViewArmor.adapter = armorAdapter
-                }
-                isLocalDataExist = true
-            }
+            // if (isLocalDataExist) {
+            //     viewModel.armorList.observe(viewLifecycleOwner) {
+            //         armorAdapter.getAll(it)
+            //         binding.recyclerViewArmor.adapter = armorAdapter
+            //     }
+            // } else {
+            //     gettingDataForLocal()
+            //     viewModel.armorList.observe(viewLifecycleOwner) {
+            //         armorAdapter.getAll(it)
+            //         binding.recyclerViewArmor.adapter = armorAdapter
+            //     }
+            //     isLocalDataExist = true
+            // }
+            gettingDataForLocal()
         }
     }
     private fun gettingDataForLocal() {
-        viewModel.getArmor(binding)
+        viewModel.getArmor()
         viewModel.armorList.observe(viewLifecycleOwner) {
             list = it as java.util.ArrayList
-            viewModel.insertArmor(list)
+            armorAdapter.getAll(it)
+            binding.recyclerViewArmor.adapter = armorAdapter
         }
     }
 
     private fun checkingDataLocal() {
         viewModel.getArmorLocal()
-        viewModel.armorListLocal.observe(viewLifecycleOwner) {
+        viewModel.armorList.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 isLocalDataExist = true
             }

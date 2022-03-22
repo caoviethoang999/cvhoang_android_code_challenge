@@ -121,4 +121,31 @@ class Converters {
             null
         }
     }
+
+    // @TypeConverter
+    // fun <T> objectToString(armor2: T): String = Gson().toJson(armor2)
+    //
+    // @TypeConverter
+    // fun <T> stringToObject(string: String?): T? {
+    //     return if (string != null) {
+    //         Gson().fromJson(string, object : TypeToken<T>() {}.type)
+    //     } else {
+    //         null
+    //     }
+    // }
+    //
+    // @TypeConverter
+    // fun <T:Any> listObjectToString(armor1: List<T>): String = Gson().toJson(armor1)
+    //
+    // @TypeConverter
+    // fun <T:Any> stringToListObject(string: String?): List<T>? {
+    //     return if (string != null) {
+    //         Gson().fromJson<List<T>>(
+    //             string,
+    //             object : TypeToken<List<T>>() {}.type
+    //         )
+    //     } else {
+    //         null
+    //     }
+    // }
 }
