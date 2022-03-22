@@ -11,6 +11,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,11 +63,14 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
                 else -> {}
             }
         }
-
+        viewModel.message.observe(viewLifecycleOwner){
+            Toast.makeText(activity,it,Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        gettingDataForLocal()
         binding.btnGenerateItem.clickWithDebounce {
             // if (isLocalDataExist) {
             //     viewModel.armorList.observe(viewLifecycleOwner) {
@@ -93,14 +97,14 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
         }
     }
 
-    private fun checkingDataLocal() {
-        viewModel.getArmorLocal()
-        viewModel.armorList.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                isLocalDataExist = true
-            }
-        }
-    }
+    // private fun checkingDataLocal() {
+    //     viewModel.getArmorLocal()
+    //     viewModel.armorList.observe(viewLifecycleOwner) {
+    //         if (it.isNotEmpty()) {
+    //             isLocalDataExist = true
+    //         }
+    //     }
+    // }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -2,6 +2,7 @@ package com.example.android_code_challenge.viewmodel
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android_code_challenge.model.ArmorModel
@@ -13,6 +14,7 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -22,6 +24,7 @@ class ArmorViewModel @Inject constructor(private val mainRepository: ArmorReposi
     var armorListSkill = MutableLiveData<List<ArmorSkillModel>>()
     var armorListLocal = MutableLiveData<List<ArmorModel>>()
     var status = MutableLiveData<ArmorRepository.Status>()
+    var message= MutableLiveData<String>()
     // var status = mainRepository.status
 
 
@@ -45,6 +48,8 @@ class ArmorViewModel @Inject constructor(private val mainRepository: ArmorReposi
                         // val errorBody = (e as IOException).message
                         getArmorLocal()
                         status.postValue(ArmorRepository.Status.DONE)
+                    }else if(e is SocketTimeoutException){
+                        message.postValue("Socket Time out. Please try again.")
                     }
                 }
 

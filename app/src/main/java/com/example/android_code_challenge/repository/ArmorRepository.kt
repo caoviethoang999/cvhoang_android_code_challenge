@@ -78,6 +78,7 @@ class ArmorRepository @Inject constructor(
     //
     //     return armorList
     // }
+    
     fun fetchArmorSkill(): MutableLiveData<List<ArmorSkillModel>> {
         armorService.getArmorSkill()
             .subscribeOn(Schedulers.io())
@@ -195,8 +196,8 @@ class ArmorRepository @Inject constructor(
     @SuppressLint("CheckResult")
     fun getAllArmorLocal(): Single<List<ArmorModel>> {
         return armorDAO.getAllArmor()
-            .map {
-                it.map { it ->
+            .map { it ->
+                it.map {
                     mapperArmorModel.map(it)
                 }
             }
@@ -205,8 +206,8 @@ class ArmorRepository @Inject constructor(
     @SuppressLint("CheckResult")
     fun searchArmorByName(name: String?): Single<List<ArmorModel>> {
         return armorDAO.searchArmorByName(name)
-            .map {
-                it.map {it ->
+            .map { it ->
+                it.map {
                     mapperArmorModel.map(it)
                 }
             }
