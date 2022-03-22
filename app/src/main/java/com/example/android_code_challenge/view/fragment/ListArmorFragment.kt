@@ -2,9 +2,8 @@ package com.example.android_code_challenge.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,14 +19,17 @@ import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.repository.ArmorRepository
+import com.example.android_code_challenge.utils.clickWithDebounce
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
+import com.jakewharton.rxbinding4.widget.queryTextChanges
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
-    private var armorAdapter: ArmorAdapter = ArmorAdapter()
+class ListArmorFragment : DaggerFragment() {
+    private lateinit var armorAdapter: ArmorAdapter
 
     @Inject
     lateinit var viewModel: ArmorViewModel
@@ -35,10 +37,10 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
     private lateinit var binding: FragmentListArmorBinding
     private var list: List<ArmorModel> = ArrayList()
     private var isLocalDataExist = false
+
     // private val handler: Handler = Handler()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
         val appCompatActivity = activity as AppCompatActivity?
         appCompatActivity?.setSupportActionBar(binding.armorToolbar)
         appCompatActivity?.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -63,37 +65,27 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
                 else -> {}
             }
         }
-        viewModel.message.observe(viewLifecycleOwner){
-            Toast.makeText(activity,it,Toast.LENGTH_LONG).show()
+        viewModel.message.observe(viewLifecycleOwner) {
+            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
         }
+        armorAdapter = ArmorAdapter()
+        binding.recyclerViewArmor.adapter = armorAdapter
+        binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onResume() {
         super.onResume()
-        gettingDataForLocal()
-        binding.btnGenerateItem.clickWithDebounce {
-            // if (isLocalDataExist) {
-            //     viewModel.armorList.observe(viewLifecycleOwner) {
-            //         armorAdapter.getAll(it)
-            //         binding.recyclerViewArmor.adapter = armorAdapter
-            //     }
-            // } else {
-            //     gettingDataForLocal()
-            //     viewModel.armorList.observe(viewLifecycleOwner) {
-            //         armorAdapter.getAll(it)
-            //         binding.recyclerViewArmor.adapter = armorAdapter
-            //     }
-            //     isLocalDataExist = true
-            // }
-            gettingDataForLocal()
-        }
+        binding.btnGenerateItem.clickWithDebounce(
+            actionIfNotSatisfied = {
+                binding.btnGenerateItem.isEnabled = false
+                binding.btnGenerateItem.isClickable = false
+            },
+            action = { gettingDataForLocal() })
     }
     private fun gettingDataForLocal() {
         viewModel.getArmor()
         viewModel.armorList.observe(viewLifecycleOwner) {
-            list = it as java.util.ArrayList
             armorAdapter.getAll(it)
-            binding.recyclerViewArmor.adapter = armorAdapter
         }
     }
 
@@ -115,38 +107,39 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
         return binding.root
     }
 
+    @SuppressLint("CheckResult")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_armor, menu)
         val menuItem = menu.findItem(R.id.mnSearch)
         val searchView = menuItem.actionView as SearchView
-        searchView.setOnQueryTextListener(this)
-    }
-
-    override fun onQueryTextSubmit(p0: String?): Boolean {
-        return true
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onQueryTextChange(p0: String?): Boolean {
-            viewModel.searchArmorByName(p0)
-            armorAdapter.notifyDataSetChanged()
-        return true
-    }
-
-    private fun View.clickWithDebounce(debounceTime: Long = 600L, action: () -> Unit) {
-        this.setOnClickListener(object : View.OnClickListener {
-            private var lastClickTime: Long = 0
-
-            override fun onClick(v: View) {
-                if (SystemClock.elapsedRealtime() - lastClickTime < debounceTime) {
-                    binding.btnGenerateItem.isEnabled = false
-                    binding.btnGenerateItem.isClickable = false
-                } else {
-                    action()
-                }
-
-                lastClickTime = SystemClock.elapsedRealtime()
+        searchView.queryTextChanges()
+            .debounce(1, TimeUnit.SECONDS)
+            .filter {
+                !TextUtils.isEmpty(it)
             }
-        })
+            // .debounce { p0 ->
+            //     if (p0.isEmpty()) {
+            //         Observable.empty()
+            //     } else {
+            //         Observable.empty<CharSequence>().delay(1, TimeUnit.SECONDS)
+            //     }
+            // }
+            .subscribe {
+                Log.d("DebounceTest", it.toString())
+                viewModel.searchArmorByName(it.toString())
+            }
     }
+
+    // override fun onQueryTextSubmit(p0: String?): Boolean {
+    //     return true
+    // }
+    //
+    // @SuppressLint("NotifyDataSetChanged")
+    // override fun onQueryTextChange(p0: String?): Boolean {
+    //         viewModel.searchArmorByName(p0)
+    //         //armorAdapter.notifyDataSetChanged()
+    //     return true
+    // }
+
+
 }

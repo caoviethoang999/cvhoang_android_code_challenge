@@ -11,8 +11,11 @@ import com.example.android_code_challenge.model.ArmorModel
 
 class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
     private var list: List<ArmorModel>
+
+    @SuppressLint("NotifyDataSetChanged")
     fun getAll(list: List<ArmorModel>) {
         this.list = list
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
