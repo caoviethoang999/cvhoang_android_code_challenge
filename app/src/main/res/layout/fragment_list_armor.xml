@@ -32,6 +32,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/fragmentListArmor_btnGenerateItem_text"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewArmor"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -39,16 +40,17 @@
                 app:layout_constraintTop_toBottomOf="@id/btnGenerateItem"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    <TextView
+
+    <ImageView
+        android:src="@drawable/loading_animation"
         android:visibility="invisible"
-        android:id="@+id/txtLoading"
-        android:textSize="@dimen/fragmentListArmor_txtLoading_textSize"
-        android:text="@string/fragmentListArmor_btnIsLoading_text"
+        android:id="@+id/imgLoading"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:contentDescription="@string/fragmentListArmor_imgLoading_contentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

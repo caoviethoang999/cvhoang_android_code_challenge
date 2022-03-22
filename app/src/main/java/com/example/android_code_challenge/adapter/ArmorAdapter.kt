@@ -1,6 +1,7 @@
 package com.example.android_code_challenge.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,20 +22,48 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
         return ItemViewHolder(binding)
     }
 
+    override fun onViewAttachedToWindow(holder: ItemViewHolder) {
+        Log.d("OnViewAttachedToWindow", holder.toString())
+        super.onViewAttachedToWindow(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: ItemViewHolder) {
+        Log.d("OnViewDetachedFromWindow", holder.toString())
+        super.onViewDetachedFromWindow(holder)
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val armor: ArmorModel = list[position]
         holder.binding.txtId.text = armor.id.toString()
         holder.binding.txtName.text = armor.name
-        holder.binding.txtRank.text = armor.rank
+        holder.binding.txtRank.text = "Rank: "+armor.rank.uppercase()
         if (armor.slots.isNullOrEmpty()) {
-            holder.binding.imgIconDeco.visibility= View.INVISIBLE
+            holder.binding.imgIconDeco.visibility = View.INVISIBLE
             holder.binding.txtSlots.text = ""
         } else {
-            holder.binding.imgIconDeco.visibility= View.VISIBLE
+            holder.binding.imgIconDeco.visibility = View.VISIBLE
             holder.binding.imgIconDeco.setImageResource(R.drawable.ic_deco)
             holder.binding.txtSlots.text = armor.slots.toString()
         }
+        // armor.assets?.imageMale?.let {
+        //     val imgUri=armor.assets?.imageMale?.toUri()?.buildUpon()?.scheme("https")?.build()
+        //     Glide.with(holder.binding.imgIcon.context)
+        //         .load(imgUri)
+        //         .apply(
+        //             RequestOptions()
+        //             .placeholder(R.drawable.loading_animation))
+        //         .into(holder.binding.imgIcon)
+        // }
+        // armor.assets?.imageFemale?.let {
+        //     val imgUri=armor.assets?.imageFemale?.toUri()?.buildUpon()?.scheme("https")?.build()
+        //     Glide.with(holder.binding.imgIcon.context)
+        //         .load(imgUri)
+        //         .apply(
+        //             RequestOptions()
+        //                 .placeholder(R.drawable.loading_animation))
+        //         .into(holder.binding.imgIcon)
+        // }
         holder.binding.txtDefense.text = armor.defense.toString()
         when {
             armor.type.equals("head", true) -> {

@@ -4,6 +4,7 @@
     //fragmentListArmor
     <string name="fragmentListArmor_btnGenerateItem_text">CLICK TO GENERATE ITEM</string>
     <string name="fragmentListArmor_btnIsLoading_text">Is Loading</string>
+    <string name="fragmentListArmor_imgLoading_contentDescription">This is landscape for icon</string>
 
 
     <string name="itemArmor_imgIcon_contentDescription">This is landscape for icon</string>

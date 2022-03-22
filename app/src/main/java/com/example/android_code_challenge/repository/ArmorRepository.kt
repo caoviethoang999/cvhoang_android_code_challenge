@@ -3,10 +3,10 @@ package com.example.android_code_challenge.repository
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android_code_challenge.api.ArmorService
 import com.example.android_code_challenge.database.ArmorDAO
-import com.example.android_code_challenge.databinding.FragmentListArmorBinding
 import com.example.android_code_challenge.mapper.ArmorMapper
 import com.example.android_code_challenge.mapper.ArmorModelMapper
 import com.example.android_code_challenge.mapper.ArmorSkillMapper
@@ -28,24 +28,31 @@ class ArmorRepository @Inject constructor(
     private val mapperArmorModel: ArmorModelMapper,
 ) {
 
+    enum class Status { LOADING, ERROR, DONE }
+
+    private val _status = MutableLiveData<Status>()
+
+    val status: LiveData<Status>
+        get() = _status
+
     private var armorList = MutableLiveData<List<ArmorModel>>()
 
     private var armorListLocal = MutableLiveData<List<ArmorModel>>()
 
     private var armorListSkill = MutableLiveData<List<ArmorSkillModel>>()
 
-    fun fetchArmor(binding: FragmentListArmorBinding): MutableLiveData<List<ArmorModel>> {
+    fun fetchArmor(): MutableLiveData<List<ArmorModel>> {
         armorService.getArmor()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { it ->
+            .map {
                 it.map { json ->
                     mapperArmor.map(json)
                 }
             }
             .subscribe(object : Observer<List<ArmorModel>> {
                 override fun onSubscribe(d: Disposable) {
-                    binding.txtLoading.visibility = android.view.View.VISIBLE
+                    _status.postValue(Status.LOADING)
                 }
 
                 override fun onNext(t: List<ArmorModel>) {
@@ -57,13 +64,13 @@ class ArmorRepository @Inject constructor(
                 }
 
                 override fun onComplete() {
-                    binding.txtLoading.visibility = android.view.View.INVISIBLE
+                    _status.postValue(Status.DONE)
                 }
             })
         return armorList
     }
 
-    fun fetchArmorSkill(binding: FragmentListArmorBinding): MutableLiveData<List<ArmorSkillModel>> {
+    fun fetchArmorSkill(): MutableLiveData<List<ArmorSkillModel>> {
         armorService.getArmorSkill()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -76,7 +83,7 @@ class ArmorRepository @Inject constructor(
             }
             .subscribe(object : Observer<List<ArmorSkillModel>> {
                 override fun onSubscribe(d: Disposable) {
-                    binding.txtLoading.visibility = android.view.View.VISIBLE
+                    _status.value = Status.LOADING
                 }
 
                 override fun onNext(t: List<ArmorSkillModel>) {
@@ -88,17 +95,16 @@ class ArmorRepository @Inject constructor(
                 }
 
                 override fun onComplete() {
-                    binding.txtLoading.visibility = android.view.View.INVISIBLE
+                    _status.value = Status.DONE
                 }
             })
         return armorListSkill
     }
 
-    @SuppressLint("CheckResult")
     fun getAllArmorLocal(): MutableLiveData<List<ArmorModel>> {
         armorDAO.getAllArmor()
             .subscribeOn(Schedulers.io())
-            .map {
+            .map { it ->
                 it.map {
                     mapperArmorModel.map(it)
                 }
@@ -117,7 +123,7 @@ class ArmorRepository @Inject constructor(
                 }
 
                 override fun onComplete() {
-                    Log.d("Log", "onComplete")
+                    Log.d("Log", "onCompleteLOCAL")
                 }
             })
         return armorListLocal
@@ -127,7 +133,7 @@ class ArmorRepository @Inject constructor(
     fun searchArmorByName(name: String?): MutableLiveData<List<ArmorModel>> {
         armorDAO.searchArmorByName(name)
             .subscribeOn(Schedulers.io())
-            .map {
+            .map { it ->
                 it.map {
                     mapperArmorModel.map(it)
                 }

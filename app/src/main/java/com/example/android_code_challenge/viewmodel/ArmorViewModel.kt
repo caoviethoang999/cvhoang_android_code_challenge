@@ -2,7 +2,6 @@ package com.example.android_code_challenge.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android_code_challenge.databinding.FragmentListArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.model.ArmorSkillModel
 import com.example.android_code_challenge.repository.ArmorRepository
@@ -13,6 +12,7 @@ class ArmorViewModel @Inject constructor(private val mainRepository: ArmorReposi
     var armorList = MutableLiveData<List<ArmorModel>>()
     var armorListSkill = MutableLiveData<List<ArmorSkillModel>>()
     var armorListLocal = MutableLiveData<List<ArmorModel>>()
+    var status = mainRepository.status
 
 
     // var armorList = MutableLiveData<MutableList<JSONArmorResponse>>()
@@ -21,16 +21,16 @@ class ArmorViewModel @Inject constructor(private val mainRepository: ArmorReposi
     //     armorList= mainRepository.fetchArmor(binding)
     // }
 
-    fun getArmor(binding: FragmentListArmorBinding) {
-        armorList = mainRepository.fetchArmor(binding)
+    fun getArmor() {
+        armorList = mainRepository.fetchArmor()
     }
 
-    fun fetchArmorSkill(binding: FragmentListArmorBinding) {
-        armorListSkill = mainRepository.fetchArmorSkill(binding)
+    fun fetchArmorSkill() {
+        armorListSkill = mainRepository.fetchArmorSkill()
     }
 
     fun getArmorLocal() {
-        armorListLocal = mainRepository.getAllArmorLocal()
+        mainRepository.getAllArmorLocal()
     }
 
     fun searchArmorByName(name: String?) {

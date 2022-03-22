@@ -1,9 +1,6 @@
 package com.example.android_code_challenge.view.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.Menu
@@ -18,6 +15,7 @@ import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
+import com.example.android_code_challenge.repository.ArmorRepository
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.delay
@@ -52,7 +50,15 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
             binding.btnGenerateItem.isEnabled = true
             binding.btnGenerateItem.isClickable = true
         }
-
+        viewModel.status.observe(viewLifecycleOwner) {
+            when (it) {
+                ArmorRepository.Status.LOADING ->
+                    binding.imgLoading.visibility = View.VISIBLE
+                ArmorRepository.Status.DONE ->
+                    binding.imgLoading.visibility = View.GONE
+                else -> {}
+            }
+        }
     }
 
     override fun onResume() {
@@ -74,7 +80,7 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
         }
     }
     private fun gettingDataForLocal() {
-        viewModel.getArmor(binding)
+        viewModel.getArmor()
         viewModel.armorList.observe(viewLifecycleOwner) {
             list = it as java.util.ArrayList
             viewModel.insertArmor(list)
@@ -107,13 +113,13 @@ class ListArmorFragment : DaggerFragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
+        viewModel.searchArmorByName(p0)
         return true
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onQueryTextChange(p0: String?): Boolean {
             viewModel.searchArmorByName(p0)
-            armorAdapter.notifyDataSetChanged()
+        // armorAdapter.notifyDataSetChanged()
         return true
     }
 
