@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
-import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.repository.ArmorRepository
 import com.example.android_code_challenge.utils.clickWithDebounce
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
@@ -25,15 +24,10 @@ import com.jakewharton.rxbinding4.widget.queryTextChanges
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ListArmorFragment : DaggerFragment() {
-
-    companion object{
-
-    }
 
     private lateinit var armorAdapter: ArmorAdapter
 
@@ -41,22 +35,16 @@ class ListArmorFragment : DaggerFragment() {
     lateinit var viewModel: ArmorViewModel
 
     private lateinit var binding: FragmentListArmorBinding
-    private var list: List<ArmorModel> = ArrayList()
-    private var isLocalDataExist = false
 
-    // private val handler: Handler = Handler()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //TODO: Rewrite
         val appCompatActivity = activity as AppCompatActivity?
         appCompatActivity?.setSupportActionBar(binding.armorToolbar)
         appCompatActivity?.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        // checkingDataLocal()
 
-        // handler.postDelayed({
-        //     binding.btnGenerateItem.isEnabled = true
-        //     binding.btnGenerateItem.isClickable = true
-        // }, 5000)
-
+        //TODO: Fix
         viewLifecycleOwner.lifecycleScope.launch {
             delay(3000)
             binding.btnGenerateItem.isEnabled = true
@@ -88,21 +76,14 @@ class ListArmorFragment : DaggerFragment() {
             },
             action = { gettingDataForLocal() })
     }
+
     private fun gettingDataForLocal() {
+        //TODO: Correct this
         viewModel.getArmor()
         viewModel.armorList.observe(viewLifecycleOwner) {
             armorAdapter.getAll(it)
         }
     }
-
-    // private fun checkingDataLocal() {
-    //     viewModel.getArmorLocal()
-    //     viewModel.armorList.observe(viewLifecycleOwner) {
-    //         if (it.isNotEmpty()) {
-    //             isLocalDataExist = true
-    //         }
-    //     }
-    // }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

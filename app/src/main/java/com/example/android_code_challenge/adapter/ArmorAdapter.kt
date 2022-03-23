@@ -6,35 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_code_challenge.R
-import com.example.android_code_challenge.adapter.ArmorAdapter.ArmorType.Companion.asEnumOrDefault
 import com.example.android_code_challenge.databinding.ItemArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
-import java.util.EnumMap
 
 class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
     private var list: MutableList<ArmorModel> = mutableListOf()
 
-
     enum class ArmorType(val imageResource:Int){
-        HEAD(R.drawable.ic_head),
-        CHEST(R.drawable.ic_chest),
-        GLOVES(R.drawable.ic_gloves),
-        LEGS(R.drawable.ic_legs),
-        WAIST(R.drawable.ic_waist);
+        head(R.drawable.ic_head),
+        chest(R.drawable.ic_chest),
+        gloves(R.drawable.ic_gloves),
+        legs(R.drawable.ic_legs),
+        waist(R.drawable.ic_waist);
 
         companion object {
-            private val map: MutableMap<ArmorType, Int> = EnumMap(com.example.android_code_challenge.adapter.ArmorAdapter.ArmorType::class.java)
-            init {
-                for (i in ArmorType.values()) {
-                    map[i] = i.imageResource
-                }
-            }
-            fun test(armorType: ArmorType): Int? {
-                return map[armorType]
-            }
-            inline fun <reified T : Enum<T>> String.asEnumOrDefault(defaultValue: T? = null): T? =
-                enumValues<T>().firstOrNull { it.name.equals(this, ignoreCase = true) } ?: defaultValue
-            // fun test2(string: String) = ArmorType.values().firstOrNull{ it.name.equals(this.toString(),true)}
+            private val map = values().associateBy(ArmorType::name)
+
+            fun fromStringValue(value: String) = map[value]
         }
     }
 
@@ -53,7 +41,6 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
         return ItemViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(list[position])
 
@@ -71,7 +58,7 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
                 txtName.text = armor.name
                 txtRank.text = armor.rank
                 if (armor.slots.isNullOrEmpty()) {
-                    imgIconDeco.visibility= View.INVISIBLE
+                    imgIconDeco.visibility = View.INVISIBLE
                     txtSlots.text = ""
                 } else {
                     imgIconDeco.visibility = View.VISIBLE
@@ -79,10 +66,9 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
                     txtSlots.text = armor.slots.toString()
                 }
                 txtDefense.text = armor.defense.toString()
-                armor.type.asEnumOrDefault<ArmorType>()?.let { it -> ArmorType.test(it)?.let { imgIcon.setImageResource(it) } }
+                val armorType = ArmorType.fromStringValue(armor.type) ?: return
+                imgIcon.setImageResource(armorType.imageResource)
             }
         }
     }
-
-
 }
