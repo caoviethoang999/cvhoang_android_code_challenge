@@ -6,41 +6,36 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_code_challenge.R
+import com.example.android_code_challenge.adapter.ArmorAdapter.ArmorType.Companion.asEnumOrDefault
 import com.example.android_code_challenge.databinding.ItemArmorBinding
 import com.example.android_code_challenge.model.ArmorModel
+import java.util.EnumMap
 
 class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
     private var list: MutableList<ArmorModel> = mutableListOf()
 
 
-    enum class ArmorType{
-        HEAD{
-            override fun apply(): Int {
-                return R.drawable.ic_head
-            }
-        },
-        CHEST{
-            override fun apply(): Int {
-                return R.drawable.ic_chest
-            }
-        },
-        GLOVES{
-            override fun apply(): Int {
-                return R.drawable.ic_gloves
-            }
-        },
-        LEGS{
-            override fun apply(): Int {
-                return R.drawable.ic_legs
-            }
-        },
-        WAIST{
-            override fun apply(): Int {
-                return R.drawable.ic_waist
-            }
-        };
+    enum class ArmorType(val imageResource:Int){
+        HEAD(R.drawable.ic_head),
+        CHEST(R.drawable.ic_chest),
+        GLOVES(R.drawable.ic_gloves),
+        LEGS(R.drawable.ic_legs),
+        WAIST(R.drawable.ic_waist);
 
-        abstract fun apply(): Int
+        companion object {
+            private val map: MutableMap<ArmorType, Int> = EnumMap(com.example.android_code_challenge.adapter.ArmorAdapter.ArmorType::class.java)
+            init {
+                for (i in ArmorType.values()) {
+                    map[i] = i.imageResource
+                }
+            }
+            fun test(armorType: ArmorType): Int? {
+                return map[armorType]
+            }
+            inline fun <reified T : Enum<T>> String.asEnumOrDefault(defaultValue: T? = null): T? =
+                enumValues<T>().firstOrNull { it.name.equals(this, ignoreCase = true) } ?: defaultValue
+            // fun test2(string: String) = ArmorType.values().firstOrNull{ it.name.equals(this.toString(),true)}
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -84,11 +79,7 @@ class ArmorAdapter : RecyclerView.Adapter<ArmorAdapter.ItemViewHolder>() {
                     txtSlots.text = armor.slots.toString()
                 }
                 txtDefense.text = armor.defense.toString()
-                for (test in ArmorType.values()){
-                    if(armor.type.equals(test.name,true)){
-                        imgIcon.setImageResource(test.apply())
-                    }
-                }
+                armor.type.asEnumOrDefault<ArmorType>()?.let { it -> ArmorType.test(it)?.let { imgIcon.setImageResource(it) } }
             }
         }
     }
