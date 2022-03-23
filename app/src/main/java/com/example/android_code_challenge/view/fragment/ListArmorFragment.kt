@@ -25,10 +25,16 @@ import com.jakewharton.rxbinding4.widget.queryTextChanges
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ListArmorFragment : DaggerFragment() {
+
+    companion object{
+
+    }
+
     private lateinit var armorAdapter: ArmorAdapter
 
     @Inject

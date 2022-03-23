@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModel
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.model.ArmorSkillModel
 import com.example.android_code_challenge.repository.ArmorRepository
+import com.example.android_code_challenge.utils.applySchedulers
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.net.SocketTimeoutException
@@ -21,89 +23,60 @@ import javax.inject.Inject
 class ArmorViewModel @Inject constructor(private val mainRepository: ArmorRepository) : ViewModel() {
 
     var armorList = MutableLiveData<List<ArmorModel>>()
-    var armorListSkill = MutableLiveData<List<ArmorSkillModel>>()
-    var armorListLocal = MutableLiveData<List<ArmorModel>>()
     var status = MutableLiveData<ArmorRepository.Status>()
     var message= MutableLiveData<String>()
-    // var status = mainRepository.status
 
+    private val compositeDisposable=CompositeDisposable()
 
-    // var armorList = MutableLiveData<MutableList<JSONArmorResponse>>()
-
-    // fun getArmor(binding: FragmentListArmorBinding) {
-    //     armorList= mainRepository.fetchArmor(binding)
-    // }
-
+    override fun onCleared() {
+        compositeDisposable.dispose()
+        super.onCleared()
+    }
     fun getArmor() {
-        mainRepository.fetchArmor()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<List<ArmorModel>> {
-                override fun onSubscribe(d: Disposable) {
-                    status.postValue(ArmorRepository.Status.LOADING)
-                }
-
-                override fun onError(e: Throwable) {
-                    if (e is UnknownHostException) {
-                        // val errorBody = (e as IOException).message
-                        getArmorLocal()
-                        status.postValue(ArmorRepository.Status.DONE)
-                    }else if(e is SocketTimeoutException){
-                        message.postValue("Socket Time out. Please try again.")
-                    }
-                }
-
-                override fun onSuccess(t: List<ArmorModel>) {
-                    insertArmor(t)
-                    armorList.postValue(t)
+        compositeDisposable.add(mainRepository.fetchArmor()
+            .applySchedulers()
+            .doOnSubscribe {
+                status.postValue(ArmorRepository.Status.LOADING)
+            }
+            .subscribe({
+                insertArmor(it)
+                armorList.postValue(it)
+                status.postValue(ArmorRepository.Status.DONE)
+            },{
+                if (it is UnknownHostException) {
+                    getArmorLocal()
                     status.postValue(ArmorRepository.Status.DONE)
+                }else if(it is SocketTimeoutException){
+                    message.postValue("Socket Time out. Please try again.")
                 }
-            })
+            }))
     }
 
-    fun fetchArmorSkill() {
-        armorListSkill = mainRepository.fetchArmorSkill()
-    }
-
-    fun getArmorLocal() {
-        mainRepository.getAllArmorLocal()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<List<ArmorModel>> {
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                }
-
-                override fun onSuccess(t: List<ArmorModel>) {
-                    armorList.postValue(t)
-                }
-            })
+    private fun getArmorLocal() {
+        compositeDisposable.add(mainRepository.getAllArmorLocal()
+            .applySchedulers()
+            .subscribe({
+                armorList.postValue(it)
+            },{
+                Log.d(TAG,it.toString())
+            }))
     }
 
     fun searchArmorByName(name: String?) {
-        mainRepository.searchArmorByName(name)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<List<ArmorModel>> {
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                }
-
-                override fun onSuccess(t: List<ArmorModel>) {
-                    armorList.postValue(t)
-                }
-            })
+        compositeDisposable.add( mainRepository.searchArmorByName(name)
+            .applySchedulers()
+            .subscribe({
+                armorList.postValue(it)
+            },{
+                Log.d(TAG,it.toString())
+            }))
     }
 
-    fun insertArmor(list: List<ArmorModel>) {
+    private fun insertArmor(list: List<ArmorModel>) {
         Completable.fromAction {
             mainRepository.insertArmor(list)
-        }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        }
+            .applySchedulers()
             .subscribe(object : CompletableObserver {
                 override fun onSubscribe(d: Disposable) {
                     Log.d(TAG, "onSubscribe: Called")

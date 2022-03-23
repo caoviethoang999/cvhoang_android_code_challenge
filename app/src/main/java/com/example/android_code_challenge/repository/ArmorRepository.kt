@@ -40,150 +40,6 @@ class ArmorRepository @Inject constructor(
     val status: LiveData<Status>
         get() = _status
 
-    private var armorList = MutableLiveData<List<ArmorModel>>()
-
-    private var armorListLocal = MutableLiveData<List<ArmorModel>>()
-
-    private var armorListSkill = MutableLiveData<List<ArmorSkillModel>>()
-
-
-    // fun fetchArmor(): MutableLiveData<List<ArmorModel>> {
-    //     armorService.getArmor()
-    //         .subscribeOn(Schedulers.io())
-    //         .observeOn(AndroidSchedulers.mainThread())
-    //         .map { it ->
-    //             it.map { json ->
-    //                 mapperArmor.map(json)
-    //             }
-    //         }
-    //         .subscribe(object : SingleObserver<List<ArmorModel>> {
-    //             override fun onSubscribe(d: Disposable) {
-    //                 _status.postValue(Status.LOADING)
-    //             }
-    //
-    //             override fun onError(e: Throwable) {
-    //                 if (e is UnknownHostException) {
-    //                     // val errorBody = (e as IOException).message
-    //                     getAllArmorLocal()
-    //                     _status.postValue(Status.DONE)
-    //                 }
-    //             }
-    //
-    //             override fun onSuccess(t: List<ArmorModel>) {
-    //                 insertArmor(t)
-    //                 armorList.postValue(t)
-    //                 _status.postValue(Status.DONE)
-    //             }
-    //         })
-    //
-    //     return armorList
-    // }
-    
-    fun fetchArmorSkill(): MutableLiveData<List<ArmorSkillModel>> {
-        armorService.getArmorSkill()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map {
-                mapper.map(it)
-            }
-            .map {
-                val list = it.skills!!
-                list
-            }
-            .subscribe(object : Observer<List<ArmorSkillModel>> {
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onNext(t: List<ArmorSkillModel>) {
-                    armorListSkill.postValue(t)
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.d("Log Error", e.toString())
-                }
-
-                override fun onComplete() {
-                }
-            })
-        return armorListSkill
-    }
-
-    // @SuppressLint("CheckResult")
-    // fun getAllArmorLocal(): MutableLiveData<List<ArmorModel>> {
-    //     armorDAO.getAllArmor()
-    //         .subscribeOn(Schedulers.io())
-    //         .map {
-    //             it.map {
-    //                 mapperArmorModel.map(it)
-    //             }
-    //         }
-    //         .observeOn(AndroidSchedulers.mainThread())
-    //         .subscribe(object : SingleObserver<List<ArmorModel>> {
-    //             override fun onSubscribe(d: Disposable) {
-    //             }
-    //
-    //             override fun onError(e: Throwable) {
-    //                 Log.d("Log Error", e.toString())
-    //             }
-    //
-    //             override fun onSuccess(t: List<ArmorModel>) {
-    //                 armorList.postValue(t)
-    //             }
-    //         })
-    //     return armorList
-    // }
-    //
-    // @SuppressLint("CheckResult")
-    // fun searchArmorByName(name: String?): MutableLiveData<List<ArmorModel>> {
-    //     armorDAO.searchArmorByName(name)
-    //         .subscribeOn(Schedulers.io())
-    //         .map {
-    //             it.map {
-    //                 mapperArmorModel.map(it)
-    //             }
-    //         }
-    //         .observeOn(AndroidSchedulers.mainThread())
-    //         .subscribe (object : SingleObserver<List<ArmorModel>> {
-    //             override fun onSubscribe(d: Disposable) {
-    //             }
-    //
-    //             override fun onError(e: Throwable) {
-    //                 Log.d("Log Error", e.toString())
-    //             }
-    //
-    //             override fun onSuccess(t: List<ArmorModel>) {
-    //                 armorList.postValue(t)
-    //             }
-    //         })
-    //
-    //     return armorList
-    // }
-    //
-    //
-    // fun insertArmor(list: List<ArmorModel>) {
-    //     val listTest = list.map {
-    //         mapperArmorModel.map(it)
-    //     }
-    //     Completable.fromAction {
-    //         armorDAO.insertAllArmor(listTest)
-    //     }.subscribeOn(Schedulers.io())
-    //         .observeOn(AndroidSchedulers.mainThread())
-    //         .subscribe(object : CompletableObserver {
-    //             override fun onSubscribe(d: Disposable) {
-    //                 Log.d(TAG, "onSubscribe: Called")
-    //             }
-    //
-    //             override fun onComplete() {
-    //                 Log.d(TAG, "onComplete: Called")
-    //             }
-    //
-    //             override fun onError(e: Throwable) {
-    //                 Log.d("Log Error", e.toString())
-    //             }
-    //         })
-    // }
-
-
     fun fetchArmor(): Single<List<ArmorModel>> {
         return armorService.getArmor()
             .map { it ->
@@ -215,8 +71,9 @@ class ArmorRepository @Inject constructor(
 
     fun insertArmor(list: List<ArmorModel>)
     {
-            list.map {
+        val listMapping=list.map {
                 mapperArmorModel.map(it)
             }
+        armorDAO.insertAllArmor(listMapping)
     }
 }

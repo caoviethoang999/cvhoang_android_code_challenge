@@ -14,24 +14,24 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
-    private var retrofitService: ArmorService? = null
 
     @Singleton
     @Provides
-    fun getInstance(): ArmorService {
+    fun getInstance(): Retrofit {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val okHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
-        if (retrofitService == null) {
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://mhw-db.com/")
-                .addConverterFactory(GsonConverterFactory.create(providesGson()))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(okHttpClient)
-                .build()
-            retrofitService = retrofit.create(ArmorService::class.java)
-        }
-        return retrofitService!!
+        return Retrofit.Builder()
+            .baseUrl("https://mhw-db.com/")
+            .addConverterFactory(GsonConverterFactory.create(providesGson()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+    @Singleton
+    @Provides
+    fun armorService(instance: Retrofit): ArmorService {
+        return instance.create(ArmorService::class.java)
     }
 
     @Provides
