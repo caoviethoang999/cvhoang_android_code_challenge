@@ -35,33 +35,24 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
 
     @Inject
     lateinit var viewModel: ArmorViewModel
-
+    var count = 0
     private lateinit var binding: FragmentListArmorBinding
     private var list: List<ArmorModel> = listOf()
     private var mAlreadyLoaded = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         Log.d(TAG, "OnViewCreated:Called")
         (activity as AppCompatActivity).apply {
             setSupportActionBar(binding.armorToolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        viewModel.status.observe(viewLifecycleOwner) {
-            when (it) {
-                ArmorRepository.Status.LOADING ->
-                    binding.txtLoading.visibility = View.VISIBLE
-                ArmorRepository.Status.DONE ->
-                    binding.txtLoading.visibility = View.GONE
-                else -> {}
-            }
-        }
-        viewModel.message.observe(viewLifecycleOwner) {
-            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
-        }
         armorAdapter = ArmorAdapter(this)
         binding.recyclerViewArmor.adapter = armorAdapter
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
+
         if (savedInstanceState == null && !mAlreadyLoaded) {
             mAlreadyLoaded = true
             viewModel.getArmor()
@@ -113,7 +104,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "OnResume:Called")
-        gettingDataForLocal()
         binding.btnGenerateItem.clickWithDebounce(
             actionIfNotSatisfied = {
             },
@@ -126,6 +116,8 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         //getting subscribe too many time
         //request too many time on server lead it to socket time out
         viewModel.armorList.observe(viewLifecycleOwner) {
+            count++
+            Log.d(TAG, "TEST:$count")
             list = it
             armorAdapter.getAll(list)
         }
@@ -136,6 +128,23 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        gettingDataForLocal()
+        viewModel.status.observe(viewLifecycleOwner) {
+            when (it) {
+                ArmorRepository.Status.LOADING ->
+                    binding.txtLoading.visibility = View.VISIBLE
+                ArmorRepository.Status.DONE ->
+                    binding.txtLoading.visibility = View.GONE
+                else -> {}
+            }
+        }
+        viewModel.message.observe(viewLifecycleOwner) {
+            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
+            if (it.isNotEmpty()) {
+                binding.btnGenerateItem.isClickable = true
+                binding.btnGenerateItem.isEnabled = true
+            }
+        }
         setHasOptionsMenu(true)
         Log.d(TAG, "OnCreateView:Called")
         binding = FragmentListArmorBinding.inflate(inflater, container, false)
