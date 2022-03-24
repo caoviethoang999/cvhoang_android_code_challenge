@@ -15,7 +15,9 @@ import com.example.android_code_challenge.databinding.FragmentArmorDetailBinding
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.utils.ArmorType
 import com.example.android_code_challenge.utils.ArmorType.Companion.asEnumOrDefault
+import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 class ArmorDetailFragment : DaggerFragment() {
 

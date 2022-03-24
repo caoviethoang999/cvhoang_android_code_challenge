@@ -20,7 +20,6 @@ import com.example.android_code_challenge.OnItemClickListener
 import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
-import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.repository.ArmorRepository
 import com.example.android_code_challenge.utils.clickWithDebounce
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
@@ -35,10 +34,7 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
 
     @Inject
     lateinit var viewModel: ArmorViewModel
-    var count = 0
     private lateinit var binding: FragmentListArmorBinding
-    private var list: List<ArmorModel> = listOf()
-    private var mAlreadyLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,9 +48,7 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         armorAdapter = ArmorAdapter(this)
         binding.recyclerViewArmor.adapter = armorAdapter
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
-
-        if (savedInstanceState == null && !mAlreadyLoaded) {
-            mAlreadyLoaded = true
+        if (viewModel.armorList.value == null) {
             viewModel.getArmor()
         } else {
             viewModel.getArmorLocal()
@@ -116,10 +110,7 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         //getting subscribe too many time
         //request too many time on server lead it to socket time out
         viewModel.armorList.observe(viewLifecycleOwner) {
-            count++
-            Log.d(TAG, "TEST:$count")
-            list = it
-            armorAdapter.getAll(list)
+            armorAdapter.getAll(it)
         }
     }
 
@@ -128,6 +119,9 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
+        Log.d(TAG, "OnCreateView:Called")
+        binding = FragmentListArmorBinding.inflate(inflater, container, false)
         gettingDataForLocal()
         viewModel.status.observe(viewLifecycleOwner) {
             when (it) {
@@ -145,9 +139,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
                 binding.btnGenerateItem.isEnabled = true
             }
         }
-        setHasOptionsMenu(true)
-        Log.d(TAG, "OnCreateView:Called")
-        binding = FragmentListArmorBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -170,7 +161,7 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     override fun onItemClick(position: Int) {
         val fragment = ArmorDetailFragment()
         val bundle = Bundle()
-        bundle.putParcelable("test", list[position])
+        bundle.putParcelable("test", viewModel.armorList.value?.get(position))
         fragment.arguments = bundle
         parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.fragment_container, fragment)
             .commit()

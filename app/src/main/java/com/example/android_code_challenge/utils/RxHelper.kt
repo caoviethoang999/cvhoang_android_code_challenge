@@ -12,3 +12,4 @@ fun <T> Single<T>.applySchedulers(): Single<T> = this
 fun Completable.applySchedulers(): Completable = this
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
+
