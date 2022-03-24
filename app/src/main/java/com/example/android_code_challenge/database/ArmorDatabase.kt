@@ -11,4 +11,5 @@ import com.example.android_code_challenge.utils.Converters
 abstract class ArmorDatabase : RoomDatabase() {
 
     abstract fun armorDAO(): ArmorDAO
+
 }

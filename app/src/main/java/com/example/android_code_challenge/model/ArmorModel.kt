@@ -28,6 +28,9 @@ data class ArmorModel(
         override fun toString(): String {
             return "base: $base - max: $max - augmented: $augmented"
         }
+        fun printString():String{
+            return " base: $base\n max: $max\n augmented: $augmented\n"
+        }
     }
 
     @Parcelize
@@ -37,7 +40,16 @@ data class ArmorModel(
         var ice: Int = 0,
         var thunder: Int = 0,
         var dragon: Int = 0,
-    ) : Parcelable
+    ) : Parcelable {
+        override fun toString(): String {
+            return " fire: $fire\n" +
+                " water: $water\n" +
+                " ice: $ice\n" +
+                " thunder: $thunder\n" +
+                " dragon: $dragon\n"
+        }
+    }
+
 
     @Parcelize
     data class ArmorSets(

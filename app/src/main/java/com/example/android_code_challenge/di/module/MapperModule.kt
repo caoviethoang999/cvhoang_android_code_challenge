@@ -21,4 +21,5 @@ class MapperModule {
     @Singleton
     @Provides
     fun mapperArmorModel() = ArmorModelMapper()
+
 }

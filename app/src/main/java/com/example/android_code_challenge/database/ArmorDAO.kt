@@ -11,6 +11,7 @@ import io.reactivex.Single
 @Dao
 
 interface ArmorDAO {
+
     @Query("SELECT * FROM tblArmor")
     fun getAllArmor(): Single<List<ArmorModelEntity>>
 
@@ -20,4 +21,5 @@ interface ArmorDAO {
 
     @Query("SELECT * FROM tblArmor WHERE name LIKE '%' || :name || '%'")
     fun searchArmorByName(name: String?): Single<List<ArmorModelEntity>>
+
 }

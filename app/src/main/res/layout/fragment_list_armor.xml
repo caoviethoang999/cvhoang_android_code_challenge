@@ -33,6 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/fragmentListArmor_btnGenerateItem_text"/>
             <androidx.recyclerview.widget.RecyclerView
+
                 android:id="@+id/recyclerViewArmor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +44,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <TextView
+        android:background="@color/teal_700"
         android:visibility="invisible"
         android:id="@+id/txtLoading"
         android:textSize="@dimen/fragmentListArmor_txtLoading_textSize"

@@ -13,7 +13,7 @@ data class JSONArmorResponse(
     val rarity: Int = 0,
     @SerializedName("defense")
     val defense: Defense? = null,
-    @SerializedName("resistance")
+    @SerializedName("resistances")
     val resistance: Resistance? = null,
     @SerializedName("attributes")
     val attributes: Attributes? = null,

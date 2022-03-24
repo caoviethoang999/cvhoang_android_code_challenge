@@ -45,11 +45,7 @@ data class ArmorModelEntity(
         var max: Int? = 0,
         @ColumnInfo(name = "augmented")
         var augmented: Int? = 0,
-    ) {
-        override fun toString(): String {
-            return "base: $base - max: $max - augmented: $augmented"
-        }
-    }
+    )
 
     @Entity
     data class Resistance(

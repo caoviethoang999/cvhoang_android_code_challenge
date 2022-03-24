@@ -7,16 +7,13 @@ import io.reactivex.Single
 import retrofit2.http.GET
 
 interface ArmorService {
+
     //JSon return a array object
     @GET("armor")
     fun getArmor(): Single<List<JSONArmorResponse>>
 
-
+    //Json return a object array
     @GET("armor/1")
     fun getArmorSkill(): Observable<JSONArmorSkillResponse>
-
-    // //Json return a object array
-    // @GET("armor")
-    // fun getArmor(): Observable<JSONArmorResponse>
 
 }

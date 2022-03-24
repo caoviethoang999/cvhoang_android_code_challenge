@@ -1,19 +1,22 @@
 package com.example.android_code_challenge.view.fragment
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android_code_challenge.OnItemClickListener
 import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
@@ -23,17 +26,10 @@ import com.example.android_code_challenge.utils.clickWithDebounce
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import com.jakewharton.rxbinding4.widget.queryTextChanges
 import dagger.android.support.DaggerFragment
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ListArmorFragment : DaggerFragment() {
-
-    companion object{
-
-    }
+class ListArmorFragment : DaggerFragment(), OnItemClickListener {
 
     private lateinit var armorAdapter: ArmorAdapter
 
@@ -41,27 +37,16 @@ class ListArmorFragment : DaggerFragment() {
     lateinit var viewModel: ArmorViewModel
 
     private lateinit var binding: FragmentListArmorBinding
-    private var list: List<ArmorModel> = ArrayList()
-    private var isLocalDataExist = false
-
-    // private val handler: Handler = Handler()
+    private var list: List<ArmorModel> = listOf()
+    private var mAlreadyLoaded = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val appCompatActivity = activity as AppCompatActivity?
-        appCompatActivity?.setSupportActionBar(binding.armorToolbar)
-        appCompatActivity?.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        // checkingDataLocal()
-
-        // handler.postDelayed({
-        //     binding.btnGenerateItem.isEnabled = true
-        //     binding.btnGenerateItem.isClickable = true
-        // }, 5000)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            delay(3000)
-            binding.btnGenerateItem.isEnabled = true
-            binding.btnGenerateItem.isClickable = true
+        Log.d(TAG, "OnViewCreated:Called")
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(binding.armorToolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
+
         viewModel.status.observe(viewLifecycleOwner) {
             when (it) {
                 ArmorRepository.Status.LOADING ->
@@ -74,41 +59,85 @@ class ListArmorFragment : DaggerFragment() {
         viewModel.message.observe(viewLifecycleOwner) {
             Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
         }
-        armorAdapter = ArmorAdapter()
+        armorAdapter = ArmorAdapter(this)
         binding.recyclerViewArmor.adapter = armorAdapter
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
+        if (savedInstanceState == null && !mAlreadyLoaded) {
+            mAlreadyLoaded = true
+            viewModel.getArmor()
+        } else {
+            viewModel.getArmorLocal()
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "OnAttach:Called")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "OnStart:Called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "OnStop:Called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "OnPause:Called")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "OnDestroyView:Called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "OnDestroy:Called")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "OnDetach:Called")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "OnCreate:Called")
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "OnResume:Called")
+        gettingDataForLocal()
         binding.btnGenerateItem.clickWithDebounce(
             actionIfNotSatisfied = {
-                binding.btnGenerateItem.isEnabled = false
-                binding.btnGenerateItem.isClickable = false
             },
-            action = { gettingDataForLocal() })
+            action = {
+                viewModel.getArmor()
+            })
     }
+
     private fun gettingDataForLocal() {
-        viewModel.getArmor()
+        //getting subscribe too many time
+        //request too many time on server lead it to socket time out
         viewModel.armorList.observe(viewLifecycleOwner) {
-            armorAdapter.getAll(it)
+            list = it
+            armorAdapter.getAll(list)
         }
     }
 
-    // private fun checkingDataLocal() {
-    //     viewModel.getArmorLocal()
-    //     viewModel.armorList.observe(viewLifecycleOwner) {
-    //         if (it.isNotEmpty()) {
-    //             isLocalDataExist = true
-    //         }
-    //     }
-    // }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
+        Log.d(TAG, "OnCreateView:Called")
         binding = FragmentListArmorBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -123,29 +152,28 @@ class ListArmorFragment : DaggerFragment() {
             .filter {
                 !TextUtils.isEmpty(it)
             }
-            // .debounce { p0 ->
-            //     if (p0.isEmpty()) {
-            //         Observable.empty()
-            //     } else {
-            //         Observable.empty<CharSequence>().delay(1, TimeUnit.SECONDS)
-            //     }
-            // }
             .subscribe {
                 Log.d("DebounceTest", it.toString())
                 viewModel.searchArmorByName(it.toString())
             }
     }
 
-    // override fun onQueryTextSubmit(p0: String?): Boolean {
-    //     return true
-    // }
-    //
-    // @SuppressLint("NotifyDataSetChanged")
-    // override fun onQueryTextChange(p0: String?): Boolean {
-    //         viewModel.searchArmorByName(p0)
-    //         //armorAdapter.notifyDataSetChanged()
-    //     return true
-    // }
+    override fun onItemClick(position: Int) {
+        val fragment = ArmorDetailFragment()
+        val bundle = Bundle()
+        bundle.putParcelable("test", list[position])
+        fragment.arguments = bundle
+        parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.fragment_container, fragment)
+            .commit()
+    }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                activity?.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

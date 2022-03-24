@@ -72,8 +72,8 @@ class ArmorModelMapper {
 
     private fun map(assets: ArmorModel.Assets): ArmorModelEntity.Assets {
         return ArmorModelEntity.Assets(
-            imageMale = assets.imageMale,
-            imageFemale = assets.imageFemale
+            imageMale = assets.imageMale?.replace("\"",""),
+            imageFemale = assets.imageFemale?.replace("\"","")
         )
     }
 
@@ -162,8 +162,8 @@ class ArmorModelMapper {
 
     private fun map(assets: ArmorModelEntity.Assets): ArmorModel.Assets {
         return ArmorModel.Assets(
-            imageMale = assets.imageMale,
-            imageFemale = assets.imageFemale
+            imageMale = assets.imageMale?.replace("\"",""),
+            imageFemale = assets.imageFemale?.replace("\"","")
         )
     }
 

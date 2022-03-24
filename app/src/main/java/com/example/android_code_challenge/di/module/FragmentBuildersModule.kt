@@ -1,5 +1,6 @@
 package com.example.android_code_challenge.di.module
 
+import com.example.android_code_challenge.view.fragment.ArmorDetailFragment
 import com.example.android_code_challenge.view.fragment.ListArmorFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -9,4 +10,7 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeListArmorFragment(): ListArmorFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeArmorDetailFragment(): ArmorDetailFragment
 }
