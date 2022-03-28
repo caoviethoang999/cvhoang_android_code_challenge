@@ -60,7 +60,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         armorAdapter = ArmorAdapter(this)
         if (::armorAdapter.isInitialized)
             binding.recyclerViewArmor.adapter = armorAdapter
-
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
         if (viewModel.armorList.value == null) {
             viewModel.getArmor()
@@ -163,7 +162,7 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-        val newFragment = ArmorDetailFragment.newInstance(viewModel.armorList.value?.get(position) ?: return)
+        val newFragment = ArmorDetailFragment.newInstance(armorAdapter.getArmorItemAtPosition(position) ?: return)
         parentFragmentManager
             .beginTransaction()
             .addToBackStack(null)

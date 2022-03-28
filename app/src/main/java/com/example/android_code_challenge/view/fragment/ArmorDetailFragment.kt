@@ -39,7 +39,7 @@ class ArmorDetailFragment : DaggerFragment() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         val bundle = this.arguments
-        val test: ArmorModel? = bundle?.getParcelable("test")
+        val test: ArmorModel? = bundle?.getParcelable("EXTRA_KEY_MODEL")
         binding.txtDefense?.text = test?.defense?.printString()
         binding.txtResistance?.text = test?.resistance?.toString()
         binding.txtName?.text = test?.name

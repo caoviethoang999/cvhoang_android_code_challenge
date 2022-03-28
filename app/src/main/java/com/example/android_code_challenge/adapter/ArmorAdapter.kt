@@ -1,7 +1,6 @@
 package com.example.android_code_challenge.adapter
 
 import android.annotation.SuppressLint
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,18 +16,27 @@ import com.example.android_code_challenge.utils.ArmorType.Companion.asEnumOrDefa
 class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var list: MutableList<AdapterItem> = mutableListOf()
+    private val _list: MutableList<AdapterItem> = mutableListOf()
+
+    fun getArmorItemAtPosition(position: Int): ArmorModel? {
+        return (_list[position] as? ArmorRowItem)?.item
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun getAll(addList: MutableList<ArmorModel>) {
+        _list.clear()
         val armorGroup = addList.groupBy {
             it.type
         }
         for ((type, itemList) in armorGroup) {
-            list.add(Header(type))
-            list.addAll(itemList.map { ArmorRowItem(it) })
+            _list.add(Header(type))
+            _list.addAll(itemList.map { ArmorRowItem(it) })
         }
         notifyDataSetChanged()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return _list[position].type
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -47,51 +55,25 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = _list[position]
         when (holder) {
             is ItemViewHolder -> {
-                if (list.size < 6) {
-                    holder.bind(list[position])
-                } else {
-                    holder.bind(list[position - 1])
-                }
+                holder.bind((item as? ArmorRowItem)?.item ?: return)
             }
             is TextViewHolder -> {
-                if (list.size != 0) {
-                    holder.bind(list[position])
-                }
+                holder.bind((item as? Header)?.itemType ?: return)
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
-    }
-
-    private fun getItem(position: Int): List<Boolean> {
-        var lastHeader: String? = ""
-        val listTest = ArrayList<Boolean>()
-        if (position == list.size) {
-            listTest.add(true)
-        }
-        if (list.size < 6) {
-            listTest.add(false)
-        }
-        for (test in list) {
-            val header: String = java.lang.String.valueOf(test.type[0])
-            if (!TextUtils.equals(lastHeader, header)) {
-                lastHeader = header
-                listTest.add(true)
-            } else {
-                listTest.add(false)
-            }
-        }
-        return listTest
+        return _list.size
     }
 
     inner class TextViewHolder(private val binding: HeaderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(armor: ArmorModel) {
+        fun bind(header: String) {
             with(binding) {
-                text.text = armor.type.uppercase()
+                text.text = header.uppercase()
             }
         }
     }
@@ -116,26 +98,13 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
                     imgIcon.setImageResource(it.imageResource)
                 }
                 itemView.setOnClickListener {
-                    if (list.size < 6) {
-                        onItemClickListener.onItemClick(adapterPosition)
-                    } else {
-                        onItemClickListener.onItemClick(adapterPosition - 1)
-                    }
+                    onItemClickListener.onItemClick(adapterPosition)
                 }
             }
         }
     }
 
-    companion object {
-        private const val ITEM_VIEW_TYPE_HEADER = 0
-        private const val ITEM_VIEW_TYPE_ITEM = 1
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return list[position].type
-    }
-
-    sealed class AdapterItem {
+    private sealed class AdapterItem {
         abstract val type: Int
     }
 
@@ -145,6 +114,11 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
 
     private data class Header(val itemType: String) : AdapterItem() {
         override val type = ITEM_VIEW_TYPE_HEADER
+    }
+
+    companion object {
+        private const val ITEM_VIEW_TYPE_HEADER = 0
+        private const val ITEM_VIEW_TYPE_ITEM = 1
     }
 }
 
