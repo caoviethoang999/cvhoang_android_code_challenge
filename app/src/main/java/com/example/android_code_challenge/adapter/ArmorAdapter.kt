@@ -17,27 +17,16 @@ import com.example.android_code_challenge.utils.ArmorType.Companion.asEnumOrDefa
 class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var list: MutableList<ArmorModel> = mutableListOf()
+    private var list: MutableList<AdapterItem> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun getAll(list: MutableList<ArmorModel>) {
-        list.sortBy {
+    fun getAll(addList: MutableList<ArmorModel>) {
+        val armorGroup = addList.groupBy {
             it.type
         }
-        this.list.apply {
-            clear()
-            addAll(list)
-            // sortedWith {
-            //         p0, p1 -> p0.type.compareTo(p1.type)
-            // }
-            // sortBy {
-            //     it.type.apply {
-            //         this.chars().sorted()
-            //     }
-            // }
-            // sortBy {
-            //     it.type
-            // }
+        for ((type, itemList) in armorGroup) {
+            list.add(Header(type))
+            list.addAll(itemList.map { ArmorRowItem(it) })
         }
         notifyDataSetChanged()
     }
@@ -75,11 +64,7 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
     }
 
     override fun getItemCount(): Int {
-        return if (list.size < 6) {
-            list.size
-        } else {
-            list.size + 1
-        }
+        return list.size
     }
 
     private fun getItem(position: Int): List<Boolean> {
@@ -101,19 +86,6 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
             }
         }
         return listTest
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return if (getItem(position)[position]) {
-            if (list.size < 6){
-                ITEM_VIEW_TYPE_ITEM
-            }else{
-                ITEM_VIEW_TYPE_HEADER
-            }
-            // ITEM_VIEW_TYPE_HEADER
-        } else {
-            ITEM_VIEW_TYPE_ITEM
-        }
     }
 
     inner class TextViewHolder(private val binding: HeaderBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -157,6 +129,22 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
     companion object {
         private const val ITEM_VIEW_TYPE_HEADER = 0
         private const val ITEM_VIEW_TYPE_ITEM = 1
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return list[position].type
+    }
+
+    sealed class AdapterItem {
+        abstract val type: Int
+    }
+
+    private data class ArmorRowItem(val item: ArmorModel) : AdapterItem() {
+        override val type = ITEM_VIEW_TYPE_ITEM
+    }
+
+    private data class Header(val itemType: String) : AdapterItem() {
+        override val type = ITEM_VIEW_TYPE_HEADER
     }
 }
 

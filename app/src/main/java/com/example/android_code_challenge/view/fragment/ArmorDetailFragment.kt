@@ -10,16 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.example.android_code_challenge.databinding.FragmentArmorDetailBinding
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.utils.ArmorType
 import com.example.android_code_challenge.utils.ArmorType.Companion.asEnumOrDefault
-import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
 class ArmorDetailFragment : DaggerFragment() {
+
+    companion object {
+        private const val EXTRA_KEY_MODEL = "EXTRA_KEY_MODEL"
+
+        fun newInstance(model: ArmorModel) = ArmorDetailFragment().apply {
+            arguments = bundleOf(EXTRA_KEY_MODEL to model)
+        }
+    }
 
     private lateinit var binding: FragmentArmorDetailBinding
 

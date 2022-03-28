@@ -36,22 +36,67 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     @Inject
     lateinit var viewModel: ArmorViewModel
     private lateinit var binding: FragmentListArmorBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        setHasOptionsMenu(true)
+        Log.d(TAG, "OnCreateView:Called")
+
+        binding = FragmentListArmorBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "OnViewCreated:Called")
-        (activity as AppCompatActivity).apply {
+        (activity as? AppCompatActivity)?.apply {
             setSupportActionBar(binding.armorToolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
         armorAdapter = ArmorAdapter(this)
-        binding.recyclerViewArmor.adapter = armorAdapter
+        if (::armorAdapter.isInitialized)
+            binding.recyclerViewArmor.adapter = armorAdapter
+
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
         if (viewModel.armorList.value == null) {
             viewModel.getArmor()
         } else {
             viewModel.getArmorLocal()
+        }
+
+        binding.btnGenerateItem.clickWithDebounce(
+            actionIfNotSatisfied = {},
+            action = {
+                viewModel.getArmor()
+            })
+
+        handleObservables()
+    }
+
+    private fun handleObservables() {
+        viewModel.status.observe(viewLifecycleOwner) {
+            when (it) {
+                ArmorRepository.Status.LOADING ->
+                    binding.txtLoading.visibility = View.VISIBLE
+                ArmorRepository.Status.DONE ->
+                    binding.txtLoading.visibility = View.GONE
+                else -> {}
+            }
+        }
+        viewModel.message.observe(viewLifecycleOwner) {
+            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
+            if (it.isNotEmpty()) {
+                binding.btnGenerateItem.isClickable = true
+                binding.btnGenerateItem.isEnabled = true
+            }
+        }
+        viewModel.armorList.observe(viewLifecycleOwner) {
+            Log.d(TAG, it.size.toString())
+            armorAdapter.getAll(it as MutableList<ArmorModel>)
         }
     }
 
@@ -81,8 +126,9 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Log.d(TAG, "OnDestroy:Called")
+
+        super.onDestroy()
     }
 
     override fun onDetach() {
@@ -98,57 +144,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "OnResume:Called")
-        binding.btnGenerateItem.clickWithDebounce(
-            actionIfNotSatisfied = {
-            },
-            action = {
-                viewModel.getArmor()
-            })
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun gettingDataForLocal() {
-        //getting subscribe too many time
-        //request too many time on server lead it to socket time out
-        viewModel.armorList.observe(viewLifecycleOwner) {
-            // it.sortedWith {
-            //         p0, p1 -> p0.type.compareTo(p1.type)
-            // }
-            // list= it as MutableList<ArmorModel>
-            // list.sortBy {
-            //     it.type
-            // }
-            Log.d(TAG, it.size.toString())
-            armorAdapter.getAll(it as MutableList<ArmorModel>)
-        }
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        setHasOptionsMenu(true)
-        Log.d(TAG, "OnCreateView:Called")
-        gettingDataForLocal()
-        binding = FragmentListArmorBinding.inflate(inflater, container, false)
-        viewModel.status.observe(viewLifecycleOwner) {
-            when (it) {
-                ArmorRepository.Status.LOADING ->
-                    binding.txtLoading.visibility = View.VISIBLE
-                ArmorRepository.Status.DONE ->
-                    binding.txtLoading.visibility = View.GONE
-                else -> {}
-            }
-        }
-        viewModel.message.observe(viewLifecycleOwner) {
-            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
-            if (it.isNotEmpty()) {
-                binding.btnGenerateItem.isClickable = true
-                binding.btnGenerateItem.isEnabled = true
-            }
-        }
-        return binding.root
     }
 
     @SuppressLint("CheckResult")
@@ -168,12 +163,12 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-        val fragment = ArmorDetailFragment()
-        val bundle = Bundle()
-        bundle.putParcelable("test", viewModel.armorList.value?.get(position))
-        fragment.arguments = bundle
-        parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.fragment_container, fragment)
-            .commit()
+        val newFragment = ArmorDetailFragment.newInstance(viewModel.armorList.value?.get(position) ?: return)
+        parentFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.fragment_container, newFragment)
+            .commitAllowingStateLoss()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
