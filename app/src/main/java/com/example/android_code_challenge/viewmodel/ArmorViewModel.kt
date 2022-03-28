@@ -46,7 +46,6 @@ class ArmorViewModel @Inject constructor(private val mainRepository: ArmorReposi
                     _status.postValue(ArmorRepository.Status.DONE)
                 }
                 .subscribe({
-                    // insertArmor(it)
                     _armorList.postValue(it)
                 }, {
                     if (it is UnknownHostException) {
@@ -80,24 +79,4 @@ class ArmorViewModel @Inject constructor(private val mainRepository: ArmorReposi
                 })
         )
     }
-
-    // private fun insertArmor(list: List<ArmorModel>) {
-    //     Completable.fromAction {
-    //         mainRepository.insertArmor(list)
-    //     }
-    //         .applySchedulers()
-    //         .subscribe(object : CompletableObserver {
-    //             override fun onSubscribe(d: Disposable) {
-    //                 Log.d(TAG, "onSubscribe: Called")
-    //             }
-    //
-    //             override fun onComplete() {
-    //                 Log.d(TAG, "onComplete: Called")
-    //             }
-    //
-    //             override fun onError(e: Throwable) {
-    //                 Log.d("Log Error", e.toString())
-    //             }
-    //         })
-    // }
 }

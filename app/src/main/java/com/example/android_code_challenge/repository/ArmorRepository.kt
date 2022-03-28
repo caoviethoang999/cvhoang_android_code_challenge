@@ -57,11 +57,11 @@ class ArmorRepository @Inject constructor(
             }
     }
 
-    private fun insertArmor(list: List<ArmorModel>)
-    {
-        val listMapping=list.map {
-                mapperArmorModel.map(it)
-            }
+
+    private fun insertArmor(list: List<ArmorModel>) {
+        val listMapping = list.map {
+            mapperArmorModel.map(it)
+        }
         armorDAO.insertAllArmor(listMapping)
     }
 }

@@ -12,5 +12,8 @@ enum class ArmorType(val imageResource: Int) {
     companion object {
         inline fun <reified T : Enum<T>> String.asEnumOrDefault() =
             enumValues<T>().firstOrNull { it.name.equals(this, ignoreCase = true) }
+
+        private val map = values().associateBy(ArmorType::name)
+        fun fromString(string: String) = map[string]
     }
 }

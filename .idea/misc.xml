@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_armor_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_list_armor.xml" value="0.20689655172413793" />
+        <entry key="app/src/main/res/layout/header.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_armor.xml" value="0.21467391304347827" />
         <entry key="app/src/main/res/menu/menu_armor.xml" value="0.15885416666666666" />
       </map>

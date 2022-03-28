@@ -18,6 +18,7 @@ data class ArmorModel(
     var armorSet: ArmorSets? = null,
     var assets: Assets? = null,
     var crafting: Materials? = null,
+
 ) : Parcelable {
     @Parcelize
     data class Defense(

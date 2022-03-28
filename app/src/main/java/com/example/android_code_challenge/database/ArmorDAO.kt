@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.android_code_challenge.model.ArmorModelEntity
-import io.reactivex.Observable
 import io.reactivex.Single
 
 @Dao
@@ -21,5 +20,4 @@ interface ArmorDAO {
 
     @Query("SELECT * FROM tblArmor WHERE name LIKE '%' || :name || '%'")
     fun searchArmorByName(name: String?): Single<List<ArmorModelEntity>>
-
 }

@@ -20,6 +20,7 @@ import com.example.android_code_challenge.OnItemClickListener
 import com.example.android_code_challenge.R
 import com.example.android_code_challenge.adapter.ArmorAdapter
 import com.example.android_code_challenge.databinding.FragmentListArmorBinding
+import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.repository.ArmorRepository
 import com.example.android_code_challenge.utils.clickWithDebounce
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
@@ -35,7 +36,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     @Inject
     lateinit var viewModel: ArmorViewModel
     private lateinit var binding: FragmentListArmorBinding
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,13 +46,14 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         }
 
         armorAdapter = ArmorAdapter(this)
-        binding.recyclerViewArmor.adapter = armorAdapter
+        // binding.recyclerViewArmor.adapter = armorAdapter
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
         if (viewModel.armorList.value == null) {
             viewModel.getArmor()
         } else {
             viewModel.getArmorLocal()
         }
+
     }
 
     override fun onAttach(context: Context) {
@@ -106,11 +107,21 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
             })
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun gettingDataForLocal() {
         //getting subscribe too many time
         //request too many time on server lead it to socket time out
         viewModel.armorList.observe(viewLifecycleOwner) {
-            armorAdapter.getAll(it)
+            // it.sortedWith {
+            //         p0, p1 -> p0.type.compareTo(p1.type)
+            // }
+            // list= it as MutableList<ArmorModel>
+            // list.sortBy {
+            //     it.type
+            // }
+            Log.d(TAG, it.size.toString())
+            armorAdapter.getAll(it as MutableList<ArmorModel>)
+            binding.recyclerViewArmor.adapter = armorAdapter
         }
     }
 
@@ -121,8 +132,8 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     ): View {
         setHasOptionsMenu(true)
         Log.d(TAG, "OnCreateView:Called")
-        binding = FragmentListArmorBinding.inflate(inflater, container, false)
         gettingDataForLocal()
+        binding = FragmentListArmorBinding.inflate(inflater, container, false)
         viewModel.status.observe(viewLifecycleOwner) {
             when (it) {
                 ArmorRepository.Status.LOADING ->
