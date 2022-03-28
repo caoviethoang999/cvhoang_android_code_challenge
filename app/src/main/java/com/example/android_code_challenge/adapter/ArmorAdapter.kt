@@ -39,7 +39,7 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
             //     it.type
             // }
         }
-        // notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -60,7 +60,7 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ItemViewHolder -> {
-                if (list.size == 1) {
+                if (list.size < 6) {
                     holder.bind(list[position])
                 } else {
                     holder.bind(list[position - 1])
@@ -75,7 +75,7 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
     }
 
     override fun getItemCount(): Int {
-        return if (list.size == 1) {
+        return if (list.size < 6) {
             list.size
         } else {
             list.size + 1
@@ -88,7 +88,7 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
         if (position == list.size) {
             listTest.add(true)
         }
-        if (list.size == 1) {
+        if (list.size < 6) {
             listTest.add(false)
         }
         for (test in list) {
@@ -104,9 +104,13 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
     }
 
     override fun getItemViewType(position: Int): Int {
-
         return if (getItem(position)[position]) {
-            ITEM_VIEW_TYPE_HEADER
+            if (list.size < 6){
+                ITEM_VIEW_TYPE_ITEM
+            }else{
+                ITEM_VIEW_TYPE_HEADER
+            }
+            // ITEM_VIEW_TYPE_HEADER
         } else {
             ITEM_VIEW_TYPE_ITEM
         }
@@ -140,7 +144,7 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
                     imgIcon.setImageResource(it.imageResource)
                 }
                 itemView.setOnClickListener {
-                    if (list.size == 1) {
+                    if (list.size < 6) {
                         onItemClickListener.onItemClick(adapterPosition)
                     } else {
                         onItemClickListener.onItemClick(adapterPosition - 1)

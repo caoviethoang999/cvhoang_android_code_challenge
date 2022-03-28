@@ -46,14 +46,13 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         }
 
         armorAdapter = ArmorAdapter(this)
-        // binding.recyclerViewArmor.adapter = armorAdapter
+        binding.recyclerViewArmor.adapter = armorAdapter
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
         if (viewModel.armorList.value == null) {
             viewModel.getArmor()
         } else {
             viewModel.getArmorLocal()
         }
-
     }
 
     override fun onAttach(context: Context) {
@@ -121,7 +120,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
             // }
             Log.d(TAG, it.size.toString())
             armorAdapter.getAll(it as MutableList<ArmorModel>)
-            binding.recyclerViewArmor.adapter = armorAdapter
         }
     }
 
