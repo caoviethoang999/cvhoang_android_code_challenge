@@ -70,8 +70,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
 
         if (viewModel.armorList.value == null) {
             viewModel.getArmor()
-        } else {
-            viewModel.getArmorLocal()
         }
 
         handleObservables()

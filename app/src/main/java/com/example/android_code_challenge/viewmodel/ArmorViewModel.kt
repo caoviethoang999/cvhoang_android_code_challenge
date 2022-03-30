@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepository) : ViewModel() {
 
-    private var _armorList = mainRepository.armorList
+    private var _armorList = MutableLiveData<List<ArmorModel>>()
     val armorList: LiveData<List<ArmorModel>>
         get() = _armorList
 
@@ -56,18 +56,6 @@ class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepos
                     }
                 })
         )
-    }
-
-    fun getArmorLocal() {
-        // compositeDisposable.add(mainRepository.getAllArmorLocal()
-        //     .applySchedulers()
-        //     .subscribe({
-        //         _armorList.postValue(it)
-        //     }, {
-        //         Log.d(TAG, it.toString())
-        //     })
-        // )
-        compositeDisposable.add(mainRepository.getAllArmorLocal())
     }
 
     fun searchArmorByName(name: String?) {

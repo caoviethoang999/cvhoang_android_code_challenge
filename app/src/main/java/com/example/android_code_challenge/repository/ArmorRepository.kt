@@ -1,8 +1,6 @@
 package com.example.android_code_challenge.repository
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android_code_challenge.api.ArmorService
@@ -10,9 +8,8 @@ import com.example.android_code_challenge.database.ArmorDAO
 import com.example.android_code_challenge.mapper.ArmorMapper
 import com.example.android_code_challenge.mapper.ArmorModelMapper
 import com.example.android_code_challenge.model.ArmorModel
-import com.example.android_code_challenge.utils.applySchedulers
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -30,11 +27,6 @@ class ArmorRepository @Inject constructor(
     val status: LiveData<Status>
         get() = _status
 
-    private val _armorList = MutableLiveData<List<ArmorModel>>()
-
-    override val armorList: MutableLiveData<List<ArmorModel>>
-        get() = _armorList
-
     override fun fetchArmor(): Single<List<ArmorModel>> {
         return armorService.getArmor()
             .map { it ->
@@ -45,27 +37,22 @@ class ArmorRepository @Inject constructor(
             .doOnSuccess {
                 insertArmor(it)
             }
-            .doOnError {
-                if (it is UnknownHostException) {
+            .onErrorResumeNext {
+                if (it is UnknownHostException || it is SocketTimeoutException)
                     getAllArmorLocal()
-                }
+                else
+                    Single.error(it)
             }
     }
 
     @SuppressLint("CheckResult")
-    override fun getAllArmorLocal(): Disposable {
+    override fun getAllArmorLocal(): Single<List<ArmorModel>> {
         return armorDAO.getAllArmor()
             .map { it ->
                 it.map {
                     mapperArmorModel.map(it)
                 }
             }
-            .applySchedulers()
-            .subscribe({
-                _armorList.postValue(it)
-            }, {
-                Log.d(ContentValues.TAG, it.toString())
-            })
     }
 
     @SuppressLint("CheckResult")
