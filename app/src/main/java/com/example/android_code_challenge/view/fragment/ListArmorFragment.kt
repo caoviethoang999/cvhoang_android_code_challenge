@@ -30,15 +30,15 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ListArmorFragment : DaggerFragment(), OnItemClickListener {
-    private lateinit var armorAdapter: ArmorAdapter
-
 
     @Inject
     lateinit var viewModel: ArmorViewModel
     private lateinit var binding: FragmentListArmorBinding
+    private lateinit var armorAdapter: ArmorAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
@@ -60,17 +60,20 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         if (::armorAdapter.isInitialized)
             binding.recyclerViewArmor.adapter = armorAdapter
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.btnGenerateItem.clickWithDebounce(
+            actionIfNotSatisfied = {},
+            action = {
+                viewModel.getArmor()
+            }
+        )
+
         if (viewModel.armorList.value == null) {
             viewModel.getArmor()
         } else {
             viewModel.getArmorLocal()
         }
 
-        binding.btnGenerateItem.clickWithDebounce(
-            actionIfNotSatisfied = {},
-            action = {
-                viewModel.getArmor()
-            })
         handleObservables()
     }
 

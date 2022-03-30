@@ -28,7 +28,6 @@ class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepos
     val message: LiveData<String>
         get() = _message
 
-
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCleared() {
@@ -37,6 +36,7 @@ class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepos
     }
 
     fun getArmor() {
+        //TODO: move getting data from cache to repository
         compositeDisposable.add(
             mainRepository.fetchArmor()
                 .applySchedulers()
