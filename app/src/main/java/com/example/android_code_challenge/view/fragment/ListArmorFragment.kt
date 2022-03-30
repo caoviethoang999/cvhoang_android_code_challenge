@@ -26,6 +26,7 @@ import com.example.android_code_challenge.utils.clickWithDebounce
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import com.jakewharton.rxbinding4.widget.queryTextChanges
 import dagger.android.support.DaggerFragment
+import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -59,8 +60,8 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         armorAdapter = ArmorAdapter(this)
         if (::armorAdapter.isInitialized)
             binding.recyclerViewArmor.adapter = armorAdapter
+        binding.recyclerViewArmor.scrollToPosition(armorAdapter.itemCount + 1)
         binding.recyclerViewArmor.layoutManager = LinearLayoutManager(requireContext())
-
         binding.btnGenerateItem.clickWithDebounce(
             actionIfNotSatisfied = {},
             action = {
@@ -70,6 +71,8 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
 
         if (viewModel.armorList.value == null) {
             viewModel.getArmor()
+        }else{
+            viewModel.getAllArmorLocal()
         }
 
         handleObservables()
@@ -79,9 +82,9 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
         viewModel.status.observe(viewLifecycleOwner) {
             when (it) {
                 ArmorRepository.Status.LOADING ->
-                    binding.txtLoading.visibility = View.VISIBLE
+                    binding.imgLoading.visibility = View.VISIBLE
                 ArmorRepository.Status.DONE ->
-                    binding.txtLoading.visibility = View.GONE
+                    binding.imgLoading.visibility = View.GONE
                 else -> {}
             }
         }
@@ -178,5 +181,4 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }

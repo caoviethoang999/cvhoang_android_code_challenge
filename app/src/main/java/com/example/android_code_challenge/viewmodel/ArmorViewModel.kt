@@ -58,6 +58,18 @@ class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepos
         )
     }
 
+    fun getAllArmorLocal() {
+        compositeDisposable.add(
+            mainRepository.getAllArmorLocal()
+                .applySchedulers()
+                .subscribe({
+                    _armorList.postValue(it)
+                },{
+
+            })
+        )
+    }
+
     fun searchArmorByName(name: String?) {
         compositeDisposable.add(
             mainRepository.searchArmorByName(name)

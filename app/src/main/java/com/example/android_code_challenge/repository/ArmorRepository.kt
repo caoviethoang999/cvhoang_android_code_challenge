@@ -9,6 +9,7 @@ import com.example.android_code_challenge.mapper.ArmorMapper
 import com.example.android_code_challenge.mapper.ArmorModelMapper
 import com.example.android_code_challenge.model.ArmorModel
 import io.reactivex.Single
+import io.reactivex.rxjava3.core.Observable
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject

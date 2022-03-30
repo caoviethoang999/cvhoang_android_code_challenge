@@ -87,7 +87,7 @@ class ArmorViewModelTest {
     fun `test get ArmorFromLocal list return result`() {
         val response = listOf(ArmorModel(id = 1))
         given { repository.getAllArmorLocal() }.willReturn(Single.just(response))
-        viewModel.getArmorLocal()
+        viewModel.getAllArmorLocal()
         //TODO:
         assert(viewModel.armorList.value == response)
     }
@@ -96,7 +96,7 @@ class ArmorViewModelTest {
     fun `test get ArmorFromLocal list return empty`() {
         val response = listOf(ArmorModel())
         given { repository.getAllArmorLocal() }.willReturn(Single.just(response))
-        viewModel.getArmorLocal()
+        viewModel.getAllArmorLocal()
         //TODO:
         assert(viewModel.armorList.value == response)
     }
@@ -105,7 +105,7 @@ class ArmorViewModelTest {
     fun `test get ArmorFromLocal list return list`() {
         val response = listOf(ArmorModel(id = 1), ArmorModel(id = 2))
         given { repository.getAllArmorLocal() }.willReturn(Single.just(response))
-        viewModel.getArmorLocal()
+        viewModel.getAllArmorLocal()
         //TODO:
         assert(viewModel.armorList.value?.size == 2)
     }

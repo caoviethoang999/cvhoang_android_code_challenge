@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.126" />
         <entry key="app/src/main/res/drawable/background_item.xml" value="0.126" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.126" />
+        <entry key="app/src/main/res/drawable/loading_img.xml" value="0.1365" />
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.13447971781305115" />
         <entry key="app/src/main/res/layout-land/fragment_armor_detail.xml" value="0.1591710758377425" />
         <entry key="app/src/main/res/layout-land/fragment_list_armor.xml" value="0.13447971781305115" />

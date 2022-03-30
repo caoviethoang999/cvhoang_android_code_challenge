@@ -1,14 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.fragment.ArmorDetailFragment">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".view.fragment.ListArmorFragment">
+    <ScrollView
+      android:id="@+id/recycleViewLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/armorToolbar">
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+            <ImageView
+              android:id="@+id/imgIconType"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_imgIconType_marginTop"
+              android:layout_marginEnd="@dimen/fragmentArmorDetail_imgIconType_marginEnd"
+              android:src="@drawable/ic_gloves"
+              app:layout_constraintEnd_toStartOf="@id/txtName"
+              app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+              android:id="@+id/imgIconDeco"
+              android:layout_width="@dimen/fragmentArmorDetail_imgIconDeco_layoutWidth"
+              android:layout_height="@dimen/fragmentArmorDetail_imgIconDeco_layoutHeight"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_imgIconDeco_marginTop"
+              android:layout_marginStart="@dimen/fragmentArmorDetail_imgIconDeco_marginStart"
+              android:src="@drawable/ic_deco"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@id/txtDefense" />
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+            <ImageView
+              android:id="@+id/imgIconMale"
+              android:layout_width="@dimen/fragmentArmorDetail_imgIconMale_layoutWidth"
+              android:layout_height="@dimen/fragmentArmorDetail_imgIconMale_layoutHeight"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_imgIconMale_marginTop"
+              android:layout_marginBottom="@dimen/fragmentArmorDetail_imgIconMale_marginBottom"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toBottomOf="@id/txtName" />
 
-</FrameLayout>
+            <ImageView
+              android:id="@+id/imgIconFemale"
+              android:layout_width="@dimen/fragmentArmorDetail_imgIconFemale_layoutWidth"
+              android:layout_height="@dimen/fragmentArmorDetail_imgIconFemale_layoutHeight"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_imgIconFemale_marginTop"
+              android:layout_marginBottom="@dimen/fragmentArmorDetail_imgIconFemale_marginBottom"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toBottomOf="@id/imgIconMale" />
+
+            <TextView
+              android:id="@+id/txtName"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_txtName_marginTop"
+              android:textSize="@dimen/fragmentArmorDetail_txtName_textSize"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+
+              android:id="@+id/txtSlots"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_txtSlots_marginTop"
+              android:layout_marginStart="@dimen/fragmentArmorDetail_txtSlots_marginStart"
+              app:layout_constraintStart_toEndOf="@id/imgIconDeco"
+              app:layout_constraintTop_toBottomOf="@id/txtDefense" />
+
+            <TextView
+              android:id="@+id/txtResistance"
+              android:layout_width="@dimen/fragmentArmorDetail_txtResistance_layoutWidth"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_txtResistance_marginTop"
+              android:layout_marginEnd="@dimen/fragmentArmorDetail_txtResistance_marginEnd"
+              app:layout_constraintEnd_toStartOf="@id/imgIconMale"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@id/imgIconType" />
+
+            <TextView
+
+              android:id="@+id/txtDefense"
+              android:layout_width="@dimen/fragmentArmorDetail_txtDefense_layoutWidth"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/fragmentArmorDetail_txtDefense_marginTop"
+              app:layout_constraintEnd_toStartOf="@id/imgIconMale"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@id/txtResistance" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/armorToolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

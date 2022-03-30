@@ -1,6 +1,7 @@
 package com.example.android_code_challenge.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,14 @@ class ArmorAdapter(private val onItemClickListener: OnItemClickListener) :
         notifyDataSetChanged()
     }
 
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        Log.d("onViewAttachedToWindow",holder.toString())
+        super.onViewAttachedToWindow(holder)
+    }
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        Log.d("onViewDetachedFromWindow",holder.toString())
+        super.onViewDetachedFromWindow(holder)
+    }
     override fun getItemViewType(position: Int): Int {
         return _list[position].type
     }
