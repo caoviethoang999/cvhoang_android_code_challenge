@@ -94,4 +94,5 @@ data class ArmorModel(
 
     @Parcelize
     class Attributes : Parcelable
+
 }

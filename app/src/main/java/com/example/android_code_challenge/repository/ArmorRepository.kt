@@ -16,7 +16,7 @@ class ArmorRepository @Inject constructor(
     private val armorDAO: ArmorDAO,
     private val mapperArmor: ArmorMapper,
     private val mapperArmorModel: ArmorModelMapper,
-) {
+) : IArmorRepository {
 
     enum class Status { LOADING, ERROR, DONE }
 
@@ -25,7 +25,7 @@ class ArmorRepository @Inject constructor(
     val status: LiveData<Status>
         get() = _status
 
-    fun fetchArmor(): Single<List<ArmorModel>> {
+    override fun fetchArmor(): Single<List<ArmorModel>> {
         return armorService.getArmor()
             .map { it ->
                 it.map { json ->
@@ -38,7 +38,7 @@ class ArmorRepository @Inject constructor(
     }
 
     @SuppressLint("CheckResult")
-    fun getAllArmorLocal(): Single<List<ArmorModel>> {
+    override fun getAllArmorLocal(): Single<List<ArmorModel>> {
         return armorDAO.getAllArmor()
             .map { it ->
                 it.map {
@@ -48,7 +48,7 @@ class ArmorRepository @Inject constructor(
     }
 
     @SuppressLint("CheckResult")
-    fun searchArmorByName(name: String?): Single<List<ArmorModel>> {
+    override fun searchArmorByName(name: String?): Single<List<ArmorModel>> {
         return armorDAO.searchArmorByName(name)
             .map { it ->
                 it.map {

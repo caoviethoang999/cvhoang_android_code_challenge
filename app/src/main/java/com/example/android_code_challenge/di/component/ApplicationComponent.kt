@@ -5,6 +5,7 @@ import com.example.android_code_challenge.di.module.ActivityBuildersModule
 import com.example.android_code_challenge.di.module.FragmentBuildersModule
 import com.example.android_code_challenge.di.module.MapperModule
 import com.example.android_code_challenge.di.module.NetworkModule
+import com.example.android_code_challenge.di.module.RepositoryModule
 import com.example.android_code_challenge.di.module.RoomDatabaseModule
 import com.example.android_code_challenge.di.module.ViewModelModule
 import com.example.android_code_challenge.view.application.MainApplication
@@ -24,6 +25,7 @@ import javax.inject.Singleton
         ViewModelModule::class,
         MapperModule::class,
         RoomDatabaseModule::class,
+        RepositoryModule::class,
         AndroidSupportInjectionModule::class]
 )
 interface ApplicationComponent : AndroidInjector<DaggerApplication> {

@@ -7,13 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.repository.ArmorRepository
+import com.example.android_code_challenge.repository.IArmorRepository
 import com.example.android_code_challenge.utils.applySchedulers
 import io.reactivex.disposables.CompositeDisposable
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class ArmorViewModel @Inject constructor(private val mainRepository: ArmorRepository) : ViewModel() {
+class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepository) : ViewModel() {
 
     private val _armorList = MutableLiveData<List<ArmorModel>>()
     val armorList: LiveData<List<ArmorModel>>

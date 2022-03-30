@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_code_challenge.OnItemClickListener
 import com.example.android_code_challenge.R
@@ -30,8 +31,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ListArmorFragment : DaggerFragment(), OnItemClickListener {
-
     private lateinit var armorAdapter: ArmorAdapter
+
 
     @Inject
     lateinit var viewModel: ArmorViewModel
@@ -43,7 +44,6 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     ): View {
         setHasOptionsMenu(true)
         Log.d(TAG, "OnCreateView:Called")
-
         binding = FragmentListArmorBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -72,10 +72,8 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
             action = {
                 viewModel.getArmor()
             })
-
         handleObservables()
     }
-
     private fun handleObservables() {
         viewModel.status.observe(viewLifecycleOwner) {
             when (it) {
@@ -179,4 +177,5 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
