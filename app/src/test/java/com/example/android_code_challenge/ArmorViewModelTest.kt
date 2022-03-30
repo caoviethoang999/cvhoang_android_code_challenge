@@ -1,8 +1,6 @@
 package com.example.android_code_challenge
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.example.android_code_challenge.model.ArmorModel
 import com.example.android_code_challenge.repository.IArmorRepository
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
@@ -14,7 +12,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -50,7 +47,7 @@ class ArmorViewModelTest {
 
     @Test
     fun `test get Armor list return empty`() {
-        val response = listOf(ArmorModel())
+        val response = listOf<ArmorModel>()
         given { repository.fetchArmor() }.willReturn(Single.just(response))
         viewModel.getArmor()
         //TODO:
@@ -125,8 +122,8 @@ class ArmorViewModelTest {
 
     @Test
     fun `test search ArmorByName list return empty`() {
-        val response = listOf(ArmorModel())
-        val name="Bone"
+        val response = listOf<ArmorModel>()
+        val name = "Bone"
         given { repository.searchArmorByName(name) }.willReturn(Single.just(response))
         viewModel.searchArmorByName(name)
         //TODO:
