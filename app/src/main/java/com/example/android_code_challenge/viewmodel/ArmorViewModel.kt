@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepository) : ViewModel() {
 
-    private val _armorList = MutableLiveData<List<ArmorModel>>()
+    private var _armorList = mainRepository.armorList
     val armorList: LiveData<List<ArmorModel>>
         get() = _armorList
 
@@ -50,7 +50,7 @@ class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepos
                     _armorList.postValue(it)
                 }, {
                     if (it is UnknownHostException) {
-                        getArmorLocal()
+                        _message.postValue("Cannot Connect to Server. Please try again.")
                     } else if (it is SocketTimeoutException) {
                         _message.postValue("Socket Time out. Please try again.")
                     }
@@ -59,14 +59,15 @@ class ArmorViewModel @Inject constructor(private val mainRepository: IArmorRepos
     }
 
     fun getArmorLocal() {
-        compositeDisposable.add(mainRepository.getAllArmorLocal()
-            .applySchedulers()
-            .subscribe({
-                _armorList.postValue(it)
-            }, {
-                Log.d(TAG, it.toString())
-            })
-        )
+        // compositeDisposable.add(mainRepository.getAllArmorLocal()
+        //     .applySchedulers()
+        //     .subscribe({
+        //         _armorList.postValue(it)
+        //     }, {
+        //         Log.d(TAG, it.toString())
+        //     })
+        // )
+        compositeDisposable.add(mainRepository.getAllArmorLocal())
     }
 
     fun searchArmorByName(name: String?) {

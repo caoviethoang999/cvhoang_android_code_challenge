@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout-land/fragment_list_armor.xml" value="0.13447971781305115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_armor_detail.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/fragment_list_armor.xml" value="0.20689655172413793" />
         <entry key="app/src/main/res/layout/header.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_armor.xml" value="0.21467391304347827" />
