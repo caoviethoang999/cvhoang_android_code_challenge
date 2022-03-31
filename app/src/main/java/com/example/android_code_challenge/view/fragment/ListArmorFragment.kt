@@ -6,12 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +21,6 @@ import com.example.android_code_challenge.utils.clickWithDebounce
 import com.example.android_code_challenge.viewmodel.ArmorViewModel
 import com.jakewharton.rxbinding4.widget.queryTextChanges
 import dagger.android.support.DaggerFragment
-import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -81,10 +75,12 @@ class ListArmorFragment : DaggerFragment(), OnItemClickListener {
     private fun handleObservables() {
         viewModel.status.observe(viewLifecycleOwner) {
             when (it) {
-                ArmorRepository.Status.LOADING ->
-                    binding.imgLoading.visibility = View.VISIBLE
-                ArmorRepository.Status.DONE ->
-                    binding.imgLoading.visibility = View.GONE
+                ArmorRepository.Status.LOADING -> {
+                    binding.imgLoading?.visibility = View.VISIBLE
+                }
+                ArmorRepository.Status.DONE -> {
+                    binding.imgLoading?.visibility = View.GONE
+                }
                 else -> {}
             }
         }

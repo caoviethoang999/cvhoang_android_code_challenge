@@ -40,27 +40,27 @@ class ArmorDetailFragment : DaggerFragment() {
         }
         val bundle = this.arguments
         val test: ArmorModel? = bundle?.getParcelable("EXTRA_KEY_MODEL")
-        binding.txtDefense?.text = test?.defense?.printString()
-        binding.txtResistance?.text = test?.resistance?.toString()
-        binding.txtName?.text = test?.name
-        binding.txtSlots?.text = test?.slots.toString()
+        binding.txtDefense.text = test?.defense?.printString()
+        binding.txtResistance.text = test?.resistance?.toString()
+        binding.txtName.text = test?.name
+        binding.txtSlots.text = test?.slots.toString()
         test?.type?.asEnumOrDefault<ArmorType>()?.let {
-            binding.imgIconType?.setImageResource(it.imageResource)
+            binding.imgIconType.setImageResource(it.imageResource)
         }
         test?.assets?.imageFemale?.let {
             val imgUri = test.assets?.imageFemale?.toUri()?.buildUpon()?.scheme("https")?.build()
-            binding.imgIconFemale?.let { it1 ->
+            binding.imgIconFemale.let { it1 ->
                 Glide.with(it1.context)
-                    .load(imgUri)
-                    .into(binding.imgIconFemale!!)
+                        .load(imgUri)
+                        .into(binding.imgIconFemale)
             }
         }
         test?.assets?.imageMale?.let {
             val imgUri = test.assets?.imageMale?.toUri()?.buildUpon()?.scheme("https")?.build()
-            binding.imgIconMale?.let { it1 ->
+            binding.imgIconMale.let { it1 ->
                 Glide.with(it1.context)
-                    .load(imgUri)
-                    .into(binding.imgIconMale!!)
+                        .load(imgUri)
+                        .into(binding.imgIconMale)
             }
         }
     }
